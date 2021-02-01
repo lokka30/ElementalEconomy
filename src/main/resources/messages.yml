@@ -1,0 +1,20 @@
+# .____   .                                   .            .   .____
+# /       |     ___  , _ , _     ___  , __   _/_     ___   |   /        ___    __.  , __     __.  , _ , _   ,    .
+# |__.    |   .'   ` |' `|' `. .'   ` |'  `.  |     /   `  |   |__.   .'   ` .'   \ |'  `. .'   \ |' `|' `. |    `
+# |       |   |----' |   |   | |----' |    |  |    |    |  |   |      |      |    | |    | |    | |   |   | |    |
+# /----/ /\__ `.___, /   '   / `.___, /    |  \__/ `.__/| /\__ /----/  `._.'  `._.' /    |  `._.' /   '   /  `---|
+#                                                                                                            \___/
+#
+# Welcome to the ElementalEconomy messages.yml file. This is the file to configure every single chat message that
+# the plugin will send to players. Note that all chat messages allow you to specify multiple lines and also color
+# codes of course :)
+#
+# We highly recommend you send your edits through a YAML Parser. Beginner server owners are likely to make mistakes
+# whilst editing YAML files such as using the incorrect indentation, formatting, values, apostrophes, and so on.
+#
+# Happy configuring!
+
+# TODO Work in progress.
+
+# Do not touch this unless you know what you're doing!
+file-version: 1

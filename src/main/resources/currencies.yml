@@ -1,0 +1,30 @@
+# .____   .                                   .            .   .____
+# /       |     ___  , _ , _     ___  , __   _/_     ___   |   /        ___    __.  , __     __.  , _ , _   ,    .
+# |__.    |   .'   ` |' `|' `. .'   ` |'  `.  |     /   `  |   |__.   .'   ` .'   \ |'  `. .'   \ |' `|' `. |    `
+# |       |   |----' |   |   | |----' |    |  |    |    |  |   |      |      |    | |    | |    | |   |   | |    |
+# /----/ /\__ `.___, /   '   / `.___, /    |  \__/ `.__/| /\__ /----/  `._.'  `._.' /    |  `._.' /   '   /  `---|
+#                                                                                                            \___/
+#
+# Welcome to the ElementalEconomy messages.yml file. This is the file to edit any currencies you desire your server
+# to have. :)
+#
+# We highly recommend you send your edits through a YAML Parser. Beginner server owners are likely to make mistakes
+# whilst editing YAML files such as using the incorrect indentation, formatting, values, apostrophes, and so on.
+#
+# Happy configuring!
+
+# The default currency used by EE's own commands such as /pay and /baltop.
+default-currency: dollars
+
+# The currency used by external plugins such as Vault and thus ChestShop, Jobs, etc (since they use Vault).
+# Vault does not have multi-currency support so one must be chosen.
+external-currency: dollars
+
+currencies:
+  dollars: #TODO
+  tokens: #TODO
+
+# TODO Work in progress.
+
+# Do not touch this unless you know what you're doing!
+file-version: 1

@@ -1,0 +1,70 @@
+# .____   .                                   .            .   .____
+# /       |     ___  , _ , _     ___  , __   _/_     ___   |   /        ___    __.  , __     __.  , _ , _   ,    .
+# |__.    |   .'   ` |' `|' `. .'   ` |'  `.  |     /   `  |   |__.   .'   ` .'   \ |'  `. .'   \ |' `|' `. |    `
+# |       |   |----' |   |   | |----' |    |  |    |    |  |   |      |      |    | |    | |    | |   |   | |    |
+# /----/ /\__ `.___, /   '   / `.___, /    |  \__/ `.__/| /\__ /----/  `._.'  `._.' /    |  `._.' /   '   /  `---|
+#                                                                                                            \___/
+#
+# Welcome to the ElementalEconomy settings.yml file. This is the file to configure settings not otherwise covered
+# by 'currencies.yml' and 'messages.yml', such as toggling the update checker and debug functionality.
+#
+# We highly recommend you send your edits through a YAML Parser. Beginner server owners are likely to make mistakes
+# whilst editing YAML files such as using the incorrect indentation, formatting, values, apostrophes, and so on.
+#
+# Happy configuring!
+
+storage:
+
+  # How should ElementalEconomy store balances?
+  #
+  # Note if changing:
+  # - Balances do not transfer from previous storage solution.
+  # - Balances do not clear from your previous storage solution.
+  #   If you switch to a storage method previously used then
+  #   the balances stored there will be used.
+  # - If using MySQL, ensure you have the database details filled
+  #   out. See 'mysql-settings' below.
+  #
+  # Available storage methods:
+  # - SQLite (highly recommended for most servers)
+  #   ? Local database stored in the ElementalEconomy folder.
+  #   + Fastest, and far faster than YAML.
+  #   - Cannot synchronise with other servers.
+  #   - Difficult to manually edit data.
+  #   + No configuration.
+  #
+  # - MySQL (must-have for servers that need to sync with other servers)
+  #   ? Database stored in your MySQL server.
+  #   + Fast.
+  #   + Can synchronise with other servers.
+  #   - Difficult to manually edit data.
+  #   - Requires configuration below in mysql-settings.
+  #
+  # - YAML (great for small communities if you need full control over your data)
+  #   ? Configuration-like file stored in the ElementalEconomy folder.
+  #   - Quite fast, although slower than SQLite, although
+  #     only an issue when lots of users are stored.
+  #   - Cannot synchronise with other servers.
+  #   + Easy to manually edit data.
+  #   + No configuration.
+  #
+  method: SQLite
+
+  # If using MySQL, you must change these settings. Otherwise, you should ignore them.
+  mysql-settings:
+    username: 'user123'
+    password: 'pass123'
+    database: 'minecraft'
+    host: 'localhost:3306'
+
+# A quiet async update checker that does its job once when the plugin starts up and then leaves you alone. This
+# feature only works on 1.11+ servers, please disable it if your server is running a version older than 1.11.
+check-for-updates: true
+
+# This is for developers to use, server owners should ignore this.
+# (Prints a *ton* of spam to the console which is useful for developers to get information towards fixing bugs)
+# Note for developers: Add the debug prefix to this array for it to be logged. Ask a lead developer if unsure.
+debug: []
+
+# Do not touch this unless you know what you're doing!
+file-version: 1

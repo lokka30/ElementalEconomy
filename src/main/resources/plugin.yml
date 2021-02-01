@@ -1,0 +1,28 @@
+# .____   .                                   .            .   .____
+# /       |     ___  , _ , _     ___  , __   _/_     ___   |   /        ___    __.  , __     __.  , _ , _   ,    .
+# |__.    |   .'   ` |' `|' `. .'   ` |'  `.  |     /   `  |   |__.   .'   ` .'   \ |'  `. .'   \ |' `|' `. |    `
+# |       |   |----' |   |   | |----' |    |  |    |    |  |   |      |      |    | |    | |    | |   |   | |    |
+# /----/ /\__ `.___, /   '   / `.___, /    |  \__/ `.__/| /\__ /----/  `._.'  `._.' /    |  `._.' /   '   /  `---|
+#                                                                                                            \___/
+#
+# This is plugin.yml, a hidden file which *should not* be configured by anyone other than developers of the resource.
+
+# General information:
+name: ElementalEconomy
+version: ${project.version}
+description: ${project.description}
+author: lokka30
+
+# Dependencies:
+softdepend: [ 'Vault' ]
+
+# Other information for Bukkit:
+main: me.lokka30.elementaleconomy.ElementalEconomy
+api-version: '1.13'
+
+# Note for developers on api-verison: Although the plugin is compiled with the latest stable version of SpigotMC,
+# 1.13 is specified as the api-version to ensure the plugin loads on versions older than what the plugin is compiled
+# on. For example, loading the plugin on a 1.13 server with an api-version of 1.16 (api version > server version),
+# the plugin will simply refuse to start, as this is a compatibility measure done by the server software. This is
+# the only way around it, and it does not cause any issues. It is possible to not specify 'api-version' although
+# the server software will send a warning message to the console which a handful of server owners don't want to see.
