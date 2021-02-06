@@ -16,5 +16,6 @@ public class PlayerJoinListener implements Listener {
         if(!main.accountManager.accountExists(event.getPlayer().getUniqueId())) {
             main.accountManager.createOrResetAccount(event.getPlayer().getUniqueId());
         }
+        main.accountManager.cachedAccounts.put(event.getPlayer().getUniqueId(), main.storageManager.storage.getAccount(event.getPlayer().getUniqueId()));
     }
 }

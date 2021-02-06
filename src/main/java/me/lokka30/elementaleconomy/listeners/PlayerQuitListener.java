@@ -13,5 +13,6 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onQuit(final PlayerQuitEvent event) {
         main.accountManager.getAccount(event.getPlayer().getUniqueId()).saveBalancesToStorage();
+        main.accountManager.cachedAccounts.remove(event.getPlayer().getUniqueId());
     }
 }

@@ -21,10 +21,66 @@ default-currency: dollars
 external-currency: dollars
 
 currencies:
-  dollars: #TODO
-  tokens: #TODO
 
-# TODO Work in progress.
+  # The ideal currency for most servers - dollars!
+  dollars:
+
+    # This id will be used by the storage system. Do not change it once it is set or all balances will change to whatever is stored on that id.
+    # By default, this is 1. Ensure this does not conflict with any other currencies, else they will share the same balances!
+    id: 1
+
+    # How much of this currency should be given to players when they first discover it?
+    # By default, this is 50.00.
+    starting-balance: 50.00
+
+    # ** Only advanced users should mess with this setting! **
+    # First step of formatting the balance.
+    # Use regular a regular 'DecimalFormat' pattern from Java.
+    # By default, this is '###,##0.00'
+    decimal-format: '###,##0.00'
+
+    # This is how balances will appear to players.
+    # By default, it adds a '$' symbol as a prefix to the balance - '$%decimalFormat%'
+    display-format: '$%decimalFormat%'
+
+    # ** Only advanced users should mess with this setting! **
+    # How precise should EE store balances of this currency?
+    # Otherwise, I *highly* recommend you do not truncate any less than 2 digits.
+    # Anything more than 4 is unnecessary and will (very slightly) increase storage usage.
+    # This also limits the precision of '/pay', etc.
+    # EE's truncation will round down any extra digits, THEN process the transaction.
+    # By default, this is 2 digits.
+    truncate-digits: 2
+
+    # Psst: you can use a word-format here if you wish. See the 'tokens' example for more info. :)
+
+  # Here is another example currency. You can delete it if you wish.
+  tokens:
+
+    # Notice, this uses a different id than 'dollars'. Otherwise they would have the same balances, which would be.. weird (and pointless).
+    id: 2
+
+    # 0 tokens to start out with. This is so nobody has any Tokens whilst you test/configure the
+    # plugin, so the next currency to use id '2' does not have any old balances stored in it.
+    starting-balance: 0
+
+    # This example shows no decimals.
+    decimal-format: '###,##0'
+
+    # This example uses %wordFormat%, defined below. Also notice there is no symbol.
+    display-format: '%decimalFormat% %wordFormat%'
+
+    # Since this currency only works with integer-balances, it is okay to truncate all decimals (i.e. 0 decimal digits)
+    truncate-digits: 0
+
+    # Word format! Notice that 'dollars' didn't include word-format, as it is completely optional to include&/or use this.
+    word-format:
+
+      # When the amount is exactly 1 (i.e. 1 Token), this will be the word used.
+      singular: 'Token'
+
+      # Otherwise of the above, this will be the word used.
+      plural: 'Tokens'
 
 # Do not touch this unless you know what you're doing!
 file-version: 1

@@ -20,7 +20,6 @@ public class MySQLStorage implements Storage {
 
     /*
     TODO Tables:
-
     elemecon_accounts (id, uuid)
     elemecon_balances (id, currency, balance)
      */
@@ -30,7 +29,8 @@ public class MySQLStorage implements Storage {
 
     @Override
     public void enable() {
-        Utils.logger.info("&f(Storage) &7Using MySQL.");
+        Utils.logger.info("&f(Storage) &7Loading MySQL storage...");
+
         final String username = main.settings.getConfig().getString("storage.mysql-settings.username");
         final String password = main.settings.getConfig().getString("storage.mysql-settings.password");
         final String databaseName = main.settings.getConfig().getString("storage.mysql-settings.database");
@@ -39,12 +39,15 @@ public class MySQLStorage implements Storage {
         DatabaseOptions options = DatabaseOptions.builder().mysql(username, password, databaseName, host).build();
         Database db = PooledDatabaseOptions.builder().options(options).createHikariDatabase();
         DB.setGlobalDatabase(db);
-        Utils.logger.info("&f(Storage) &7Storage system loaded.");
+
+        Utils.logger.info("&f(Storage) &7MySQL storage loaded.");
     }
 
     @Override
     public void disable() {
         DB.close();
+
+        Utils.logger.info("&f(Storage) &7MySQL storage disabled.");
     }
 
     @Override

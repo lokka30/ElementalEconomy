@@ -1,0 +1,17 @@
+# This is an example file for developers looking at the source code to understand
+# the layout of the data.yml file used by the YAMLStorage class.
+# This file is NOT copied when the YAML storage solution is enabled, instead an
+# empty 'data.yml' will be created.
+
+# accounts -> accountId, accountUuid
+accounts:
+  1: example_uuid_here
+
+# balances -> accountId -> currencyId, balance
+balances:
+  1:
+    1: 123.45 #e.g. player accountId=1 has $123.45 of currencyId=1
+    2: 678.90
+  2:
+    1: 135.79
+    2: 246.80
