@@ -14,6 +14,7 @@ description: ${project.description}
 author: lokka30
 
 # Dependencies:
+# Note: Vault is only required for plugins not direclty using the ElemEcon API.
 softdepend: [ 'Vault' ]
 
 # Other information for Bukkit:

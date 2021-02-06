@@ -61,10 +61,18 @@ storage:
 # feature only works on 1.11+ servers, please disable it if your server is running a version older than 1.11.
 check-for-updates: true
 
+# ** It is not recommended to suppress ElementalEconomy warnings. **
+# If ElementalEconomy is annoying you with warnings, then there is a high chance you can disable them here.
+suppressed-warnings:
+
+  # If 'false', ElementalEconomy will complain when other plugins access deprecated Vault methods.
+  # Please inform the plugin developer(s) at fault to make the switch to non-reprecated Vault methods.
+  deprecated-vault-method-calls: false
+
 # This is for developers to use, server owners should ignore this.
 # (Prints a *ton* of spam to the console which is useful for developers to get information towards fixing bugs)
 # Note for developers: Add the debug prefix to this array for it to be logged. Ask a lead developer if unsure.
-debug: []
+debug: [ ]
 
 # Do not touch this unless you know what you're doing!
 file-version: 1

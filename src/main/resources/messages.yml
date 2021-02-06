@@ -14,7 +14,8 @@
 #
 # Happy configuring!
 
-# TODO Work in progress.
+update-checker:
+  - '&f(ElementalEconomy Update Checker) &7Update found! &f~&7 A new update is available on the SpigotMC page, &bv%latestVersion%&7. You''re running &bv%currentVersion%&7. &f~&7 Please update as soon as possible.'
 
 # Do not touch this unless you know what you're doing!
 file-version: 1

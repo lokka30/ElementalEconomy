@@ -9,6 +9,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 
 public class Companion {
 
@@ -24,30 +25,39 @@ public class Companion {
 
         // Server version supported?
         boolean isSupported = false;
-        for(String supportedServerVersion : Utils.supportedServerVersions) {
-            if(Bukkit.getVersion().contains(supportedServerVersion)) isSupported = true; break;
+        for (String supportedServerVersion : Utils.supportedServerVersions) {
+            if (Bukkit.getVersion().contains(supportedServerVersion)) isSupported = true;
+            break;
         }
-        if(!isSupported) possibleIncompatibilities.add(PossibleIncompatibility.UNSUPPORTED_SERVER_VERSION);
+        if (!isSupported) possibleIncompatibilities.add(PossibleIncompatibility.UNSUPPORTED_SERVER_VERSION);
 
         // Valid economy API not installed?
-        if(pluginManager.getPlugin("Vault") == null) {
+        if (pluginManager.getPlugin("Vault") == null) {
             possibleIncompatibilities.add(PossibleIncompatibility.NO_VALID_ECONOMY_API);
+        }
+
+        // Check if Towny is installed. It doesn't work with EE since they incorrectly use deprecated Vault methods. Contact lokka30 if confused.
+        if (pluginManager.getPlugin("Towny") != null) {
+            possibleIncompatibilities.add(PossibleIncompatibility.TOWNY_INSTALLED);
         }
 
         // List all possible incompatibilities.
         possibleIncompatibilitiesAmount = possibleIncompatibilities.size();
-        if(possibleIncompatibilitiesAmount == 0) {
+        if (possibleIncompatibilitiesAmount == 0) {
             Utils.logger.info("&f(Compatibility Checker) &7No possible incompatibilities were found. :)");
         } else {
             Utils.logger.warning("&f(Compatibility Checker) &b" + possibleIncompatibilitiesAmount + "&7 possible incompatibilities were found.");
 
-            for(PossibleIncompatibility possibleIncompatibility : possibleIncompatibilities) {
-                switch(possibleIncompatibility) {
+            for (PossibleIncompatibility possibleIncompatibility : possibleIncompatibilities) {
+                switch (possibleIncompatibility) {
                     case UNSUPPORTED_SERVER_VERSION:
                         Utils.logger.warning("&f(Compatibility Checker) &7Your server version &b" + Bukkit.getVersion() + "&7 is unsupported by &bElementalEconomy v" + main.getDescription().getVersion() + "&7.");
                         break;
                     case NO_VALID_ECONOMY_API:
                         Utils.logger.warning("&f(Compatibility Checker) &7You don't have a valid economy API installed alongside ElementalEconomy. Consider installing the plugin &bVault&7 to allow a plethora of other plugins to utilise ElementalEconomy.");
+                        break;
+                    case TOWNY_INSTALLED:
+                        Utils.logger.warning("&f(Compatibility Checker) &7The plugin &bTowny&7 is installed, which incorrectly uses Vault methods (which have also been deprecated for &oyears&7 now). It is unlikely the developer will fix this. ElementalEconomy will not support this.");
                         break;
                     default:
                         throw new IllegalStateException("(Compatibility Checker) Unexpected PossibleIncompatibility " + possibleIncompatibility.toString() + "!");
@@ -74,7 +84,7 @@ public class Companion {
     }
 
     public void loadStorage() {
-        Utils.logger.info("&f(Storage) &7Loading the storage system...");
+        Utils.logger.info("&f(Storage) &7Fetching configured storage system...");
         main.storageManager.loadStorage();
     }
 
@@ -87,6 +97,7 @@ public class Companion {
         new Metrics(main, 10198);
     }
 
+    public List<String> updateCheckerResult = null;
     public void checkForUpdates() {
         if(main.settings.getConfig().getBoolean("check-for-updates", false)) {
             Utils.logger.info("&f(Update Checker) &7Checking for updates...");
@@ -95,7 +106,18 @@ public class Companion {
                 final UpdateChecker updateChecker = new UpdateChecker(main, 12345); //TODO change id
                 updateChecker.getLatestVersion(latestVersion -> {
                     if(!updateChecker.getCurrentVersion().equals(latestVersion)) {
-                        Utils.logger.warning("&f(Update Checker) &7Update found! ~ A new update is available on the SpigotMC page, &bv" + latestVersion + "&7. You're running &bv" + updateChecker.getCurrentVersion() + "&7.");
+                        updateCheckerResult = main.messages.getConfig().getStringList("update-checker");
+
+                        // iterate through list, replace placeholders
+                        for (int i = 0; i < updateCheckerResult.size(); i++) {
+                            updateCheckerResult.set(i, updateCheckerResult.get(i)
+                                    .replace("%latestVersion%", latestVersion)
+                                    .replace("%currentVersion%", updateChecker.getCurrentVersion())
+                            );
+                        }
+
+                        // send warning to console
+                        updateCheckerResult.forEach(Utils.logger::warning);
                     }
                 });
             } catch(NoSuchMethodError err) {
