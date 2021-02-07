@@ -1,6 +1,5 @@
 package me.lokka30.elementaleconomy.utils;
 
-import com.sun.istack.internal.NotNull;
 import me.lokka30.elementaleconomy.ElementalEconomy;
 import me.lokka30.elementaleconomy.misc.SuppressableWarning;
 import me.lokka30.microlib.MicroLogger;
@@ -25,7 +24,7 @@ public class Utils {
      * @param extraInformation    any extra info for the warning log. can be empty (""), but not null
      * @param main                ElementalEconomy instance
      */
-    public static void sendSuppressableWarning(@NotNull SuppressableWarning suppressableWarning, @NotNull String extraInformation, @NotNull ElementalEconomy main) {
+    public static void sendSuppressableWarning(SuppressableWarning suppressableWarning, String extraInformation, ElementalEconomy main) {
         if (!main.settings.getConfig().getBoolean("suppressed-warnings." + suppressableWarning.toString(), false)) {
             logger.warning(suppressableWarning.warningMsg.replace("%extraInformation%", extraInformation));
         }
