@@ -2,10 +2,12 @@ package me.lokka30.elementaleconomy;
 
 import me.lokka30.elementaleconomy.accounts.AccountManager;
 import me.lokka30.elementaleconomy.currencies.CurrencyManager;
+import me.lokka30.elementaleconomy.hooks.VaultHook;
 import me.lokka30.elementaleconomy.storage.StorageManager;
 import me.lokka30.elementaleconomy.utils.Utils;
 import me.lokka30.microlib.QuickTimer;
 import me.lokka30.microlib.YamlConfigFile;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -32,10 +34,14 @@ public class ElementalEconomy extends JavaPlugin {
     public final YamlConfigFile messages = new YamlConfigFile(this, new File(getDataFolder(), "messages.yml"));
     public final YamlConfigFile currencies = new YamlConfigFile(this, new File(getDataFolder(), "currencies.yml"));
 
+    // Hooks with external plugins
+    public final Economy vaultHoook = new VaultHook(this);
+
     @Override
     public void onEnable() {
         Utils.logger.info("&f~ Initiating start-up procedure ~");
-        QuickTimer timer = new QuickTimer(); timer.start();
+        QuickTimer timer = new QuickTimer();
+        timer.start();
 
         instance = this;
 
@@ -43,9 +49,10 @@ public class ElementalEconomy extends JavaPlugin {
         companion.loadFiles();
         companion.loadStorage();
         companion.loadCurrencies();
+        companion.hookExternalPlugins();
 
 
-        Utils.logger.info("Running misc procedures...");
+        Utils.logger.info("&f(Startup) &7Running misc procedures...");
         companion.startMetrics();
         companion.checkForUpdates();
 
@@ -57,6 +64,7 @@ public class ElementalEconomy extends JavaPlugin {
         Utils.logger.info("&f~ Initiating shut-down procedure ~");
         QuickTimer timer = new QuickTimer(); timer.start();
 
+        companion.unhookExternalPlugins();
         companion.disableStorage();
 
         Utils.logger.info("&f~ Shut-down complete, took &b" + timer.getTimer() + "ms&f ~");

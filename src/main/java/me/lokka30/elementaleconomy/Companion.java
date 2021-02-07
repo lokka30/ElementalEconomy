@@ -3,9 +3,11 @@ package me.lokka30.elementaleconomy;
 import me.lokka30.elementaleconomy.misc.PossibleIncompatibility;
 import me.lokka30.elementaleconomy.utils.Utils;
 import me.lokka30.microlib.UpdateChecker;
+import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.ServicePriority;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -44,7 +46,7 @@ public class Companion {
         // List all possible incompatibilities.
         possibleIncompatibilitiesAmount = possibleIncompatibilities.size();
         if (possibleIncompatibilitiesAmount == 0) {
-            Utils.logger.info("&f(Compatibility Checker) &7No possible incompatibilities were found. :)");
+            Utils.logger.info("&f(Compatibility Checker) &7No possible incompatibilities were found.");
         } else {
             Utils.logger.warning("&f(Compatibility Checker) &b" + possibleIncompatibilitiesAmount + "&7 possible incompatibilities were found.");
 
@@ -93,19 +95,29 @@ public class Companion {
         main.currencyManager.loadCurrencies();
     }
 
+    public void hookExternalPlugins() {
+        Utils.logger.info("&f(Hook) &7Hooking to external plugins...");
+
+        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+            Utils.logger.info("&f(Hook) &bVault&7 found, hooking...");
+            Bukkit.getServicesManager().register(Economy.class, main.vaultHoook, main, ServicePriority.Highest);
+        }
+    }
+
     public void startMetrics() {
         new Metrics(main, 10198);
     }
 
     public List<String> updateCheckerResult = null;
+
     public void checkForUpdates() {
-        if(main.settings.getConfig().getBoolean("check-for-updates", false)) {
+        if (main.settings.getConfig().getBoolean("check-for-updates", false)) {
             Utils.logger.info("&f(Update Checker) &7Checking for updates...");
 
             try {
                 final UpdateChecker updateChecker = new UpdateChecker(main, 12345); //TODO change id
                 updateChecker.getLatestVersion(latestVersion -> {
-                    if(!updateChecker.getCurrentVersion().equals(latestVersion)) {
+                    if (!updateChecker.getCurrentVersion().equals(latestVersion)) {
                         updateCheckerResult = main.messages.getConfig().getStringList("update-checker");
 
                         // iterate through list, replace placeholders
@@ -120,9 +132,18 @@ public class Companion {
                         updateCheckerResult.forEach(Utils.logger::warning);
                     }
                 });
-            } catch(NoSuchMethodError err) {
+            } catch (NoSuchMethodError err) {
                 Utils.logger.error("&f(Update Checker) &7The update checker only supports &bMC 1.11+&7. Your server's version is &b" + Bukkit.getVersion() + "&7. Please disable '&bcheck-for-updates&7' in &bsettings.yml&7.");
             }
+        }
+    }
+
+    public void unhookExternalPlugins() {
+        Utils.logger.info("&f(Hook) &7Un-hooking from external plugins...");
+
+        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+            Utils.logger.info("&f(Hook) &bVault&7 found, un-hooking...");
+            Bukkit.getServicesManager().unregister(Economy.class, main.vaultHoook);
         }
     }
 
