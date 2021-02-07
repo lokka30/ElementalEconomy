@@ -2,16 +2,13 @@ package me.lokka30.elementaleconomy.accounts;
 
 import me.lokka30.elementaleconomy.ElementalEconomy;
 import me.lokka30.elementaleconomy.currencies.Currency;
-import me.lokka30.elementaleconomy.utils.Utils;
+import org.apache.commons.lang.Validate;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class Account {
-
-    //TODO
 
     public Account(int id, UUID uuid, HashMap<Currency, BigDecimal> currencyBalanceMap) {
         this.id = id;
@@ -53,22 +50,25 @@ public class Account {
     }
 
     public void setBalance(Currency currency, BigDecimal balance) {
+        Validate.isTrue(balance.doubleValue() >= 0, "Amount must be greater than or equal to 0.");
+        currencyBalanceMap.remove(currency);
+        currencyBalanceMap.put(currency, balance);
         ElementalEconomy.getInstance().storageManager.storage.setBalance(id, currency, balance);
     }
 
     public void deposit(Currency currency, BigDecimal amount) {
+        Validate.isTrue(amount.doubleValue() > 0, "Amount must be greater than 0.");
         setBalance(currency, getBalance(currency).add(amount));
     }
 
     public void withdraw(Currency currency, BigDecimal amount) {
-        if(has(currency, amount)) {
-            setBalance(currency, getBalance(currency).subtract(amount));
-        } else {
-            Utils.logger.error("&c[TRANSACTION SKIPPED!] &7A plugin attempted to withdraw an amount from a player's balance without ensuring that they can afford it in the first place. Currency: &b" + currency.name + "&7, amount: &b" + amount.setScale(2, RoundingMode.DOWN).doubleValue() + "&7.");
-        }
+        BigDecimal balance = getBalance(currency).subtract(amount);
+        Validate.isTrue(balance.doubleValue() >= 0, "Balance after withdrawal must be greater than or equal to 0.");
+        setBalance(currency, balance);
     }
 
     public boolean has(Currency currency, BigDecimal amount) {
+        Validate.isTrue(amount.doubleValue() > 0, "Amount must be greater than 0.");
         return amount.compareTo(getBalance(currency)) <= 0;
     }
 
