@@ -76,6 +76,8 @@ public class YAMLStorage implements Storage {
         for (Currency currency : account.getCurrencyBalanceMap().keySet()) {
             dataFile.getConfig().set("balances." + account.getId() + "." + currency.id, account.getCurrencyBalanceMap().get(currency).doubleValue());
         }
+
+        saveDataCfg();
     }
 
     @Override
@@ -83,6 +85,7 @@ public class YAMLStorage implements Storage {
         if (dataFile.getConfig().contains("currentId")) {
             final int nextId = dataFile.getConfig().getInt("currentId") + 1;
             dataFile.getConfig().set("currentId", nextId);
+            saveDataCfg();
             return nextId;
         } else {
             int nextId = 1;
@@ -92,6 +95,7 @@ public class YAMLStorage implements Storage {
                     nextId++;
                 } else {
                     dataFile.getConfig().set("currentId", nextId);
+                    saveDataCfg();
                     return nextId;
                 }
             }
@@ -101,6 +105,7 @@ public class YAMLStorage implements Storage {
     @Override
     public void setBalance(int accountId, Currency currency, BigDecimal balance) {
         dataFile.getConfig().set("balances." + accountId + "." + currency.id, balance.doubleValue());
+        saveDataCfg();
     }
 
     @Override
@@ -111,6 +116,15 @@ public class YAMLStorage implements Storage {
             return BigDecimal.valueOf(dataFile.getConfig().getDouble(path));
         } else {
             return null;
+        }
+    }
+
+    private void saveDataCfg() {
+        try {
+            dataFile.save();
+        } catch (IOException ex) {
+            Utils.logger.error("Unable to save data.yml! Stack trace:");
+            ex.printStackTrace();
         }
     }
 }
