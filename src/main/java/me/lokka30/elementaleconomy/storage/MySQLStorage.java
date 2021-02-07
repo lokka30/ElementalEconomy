@@ -80,12 +80,12 @@ public class MySQLStorage implements Storage {
     }
 
     @Override
-    public void setBalance(int id, Currency currency, BigDecimal balance) {
+    public void setBalance(int accountId, Currency currency, BigDecimal balance) {
 
     }
 
     @Override
-    public BigDecimal getBalance(int id, Currency currency) {
+    public BigDecimal getBalance(int accountId, Currency currency) {
         return null;
     }
 }
