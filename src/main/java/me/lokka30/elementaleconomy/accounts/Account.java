@@ -53,6 +53,7 @@ public class Account {
         Validate.isTrue(balance.doubleValue() >= 0, "Amount must be greater than or equal to 0.");
         currencyBalanceMap.remove(currency);
         currencyBalanceMap.put(currency, balance);
+        saveAccountToAccountMap();
         ElementalEconomy.getInstance().storageManager.storage.setBalance(id, currency, balance);
     }
 
@@ -77,6 +78,11 @@ public class Account {
     /*
     Other methods
      */
+
+    public void saveAccountToAccountMap() {
+        ElementalEconomy.getInstance().accountManager.cachedAccounts.remove(uuid);
+        ElementalEconomy.getInstance().accountManager.cachedAccounts.put(uuid, this);
+    }
 
     public void saveBalancesToStorage() {
         ElementalEconomy.getInstance().storageManager.storage.saveAccount(this);
