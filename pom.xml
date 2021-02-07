@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>ElementalEconomy</name>
-    <description>The simple and solid economy plugin.</description>
+    <description>An economy provider plugin for SpigotMC servers.</description>
 
     <properties>
         <java.version>1.8</java.version>
