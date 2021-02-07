@@ -2,7 +2,10 @@ package me.lokka30.elementaleconomy.currencies;
 
 import me.lokka30.elementaleconomy.ElementalEconomy;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class CurrencyManager {
 
@@ -22,12 +25,20 @@ public class CurrencyManager {
         currencyIdMap.clear();
         currencyNameIdMap.clear();
 
-        /*
-        TODO
-        set currencyIdMap
-        set currencyNameIdMap
-        set currencyIdStartingBalanceMap
-         */
+        for (String currencyName : Objects.requireNonNull(main.currencies.getConfig().getConfigurationSection("currencies")).getKeys(false)) {
+            final String path = "currencies." + currencyName + ".";
+            final int id = main.currencies.getConfig().getInt(path + "id", 0);
+            final BigDecimal startingBalance = BigDecimal.valueOf(main.currencies.getConfig().getDouble(path + "starting-balance", 50.00));
+            final DecimalFormat decimalFormat = new DecimalFormat(Objects.requireNonNull(main.currencies.getConfig().getString(path + "decimal-format", "0.00")));
+            final String displayFormat = main.currencies.getConfig().getString(path + "display-format", "$%balance%");
+            final int truncateDigits = main.currencies.getConfig().getInt(path + "truncate-digits", 2);
+            final String[] wordFormat = {main.currencies.getConfig().getString(path + "word-format.singular", ""), main.currencies.getConfig().getString(path + "word-format.plural", "")};
+
+            final Currency currency = new Currency(id, currencyName, startingBalance, decimalFormat, displayFormat, truncateDigits, wordFormat);
+
+            currencyIdMap.put(id, currency);
+            currencyNameIdMap.put(currencyName, id);
+        }
     }
 
     /**

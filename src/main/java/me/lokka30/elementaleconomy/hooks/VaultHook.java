@@ -2,6 +2,8 @@ package me.lokka30.elementaleconomy.hooks;
 
 import me.lokka30.elementaleconomy.ElementalEconomy;
 import me.lokka30.elementaleconomy.currencies.Currency;
+import me.lokka30.elementaleconomy.misc.SuppressableWarning;
+import me.lokka30.elementaleconomy.utils.Utils;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -88,6 +90,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public boolean hasAccount(String playerName) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=hasAccount(String), username=" + playerName, main);
         return hasAccount(Bukkit.getOfflinePlayer(playerName));
     }
 
@@ -113,6 +116,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public boolean hasAccount(String playerName, String worldName) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=hasAccount(String, String), username=" + playerName + ", world=" + worldName, main);
         return hasAccount(Bukkit.getOfflinePlayer(playerName));
     }
 
@@ -135,6 +139,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public double getBalance(String playerName) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=getBalance(String), username=" + playerName, main);
         return getBalance(Bukkit.getOfflinePlayer(playerName));
     }
 
@@ -160,6 +165,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public double getBalance(String playerName, String worldName) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=getBalance(String, String), username=" + playerName + ", world=" + worldName, main);
         return getBalance(Bukkit.getOfflinePlayer(playerName));
     }
 
@@ -172,6 +178,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public double getBalance(OfflinePlayer offlinePlayer, String worldName) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=getBalance(OfflinePlayer, String), username=" + offlinePlayer.getName() + ", world=" + worldName, main);
         return getBalance(offlinePlayer);
     }
 
@@ -185,6 +192,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public boolean has(String playerName, double amount) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=has(String, double), username=" + playerName + ", amount=" + amount, main);
         return has(Bukkit.getOfflinePlayer(playerName), amount);
     }
 
@@ -208,10 +216,11 @@ public class VaultHook implements Economy {
      * @param worldName  world name
      * @param amount     amount
      * @return if the player's balance >= amount
-     * @deprecated use has(OfflinePlayer, double) instead
+     * @deprecated see notice above.
      */
     @Override
     public boolean has(String playerName, String worldName, double amount) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=has(String, String, amount), username=" + playerName + ", world=" + worldName + ", amount=" + amount, main);
         return has(playerName, amount);
     }
 
@@ -234,10 +243,11 @@ public class VaultHook implements Economy {
      * @param playerName player name
      * @param amount     amount
      * @return Vault economy response
-     * @deprecated use withdrawPlayer(OfflinePlayer, double) instead.
+     * @deprecated see notice above.
      */
     @Override
     public EconomyResponse withdrawPlayer(String playerName, double amount) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=withdrawPlayer(String, double), username=" + playerName + ", amount=" + amount, main);
         return withdrawPlayer(Bukkit.getOfflinePlayer(playerName), amount);
     }
 
@@ -268,6 +278,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public EconomyResponse withdrawPlayer(String playerName, String worldName, double amount) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=withdrawPlayer(String, String, double), username=" + playerName + ", world=" + worldName + ", amount=" + amount, main);
         return withdrawPlayer(Bukkit.getOfflinePlayer(playerName), amount);
     }
 
@@ -294,6 +305,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public EconomyResponse depositPlayer(String playerName, double amount) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=depositPlayer(String, double), username=" + playerName + ", amount=" + amount, main);
         return depositPlayer(Bukkit.getOfflinePlayer(playerName), amount);
     }
 
@@ -323,6 +335,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public EconomyResponse depositPlayer(String playerName, String worldName, double amount) {
+        Utils.sendSuppressableWarning(SuppressableWarning.DEPRECATED_VAULT_METHOD_CALL, "method=depositPlayer(String, String, amount), username=" + playerName + ", world=" + worldName + ", amount=" + amount, main);
         return depositPlayer(playerName, amount);
     }
 
@@ -341,61 +354,73 @@ public class VaultHook implements Economy {
 
     @Override
     public EconomyResponse createBank(String s, String s1) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=createBank(String, String)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse createBank(String s, OfflinePlayer offlinePlayer) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=createBank(String, OfflinePlayer)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse deleteBank(String s) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=deleteBank(String)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse bankBalance(String s) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=bankBalance(String)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse bankHas(String s, double v) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=bankHas(String, double)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse bankWithdraw(String s, double v) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=bankWithdraw(String, double)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse bankDeposit(String s, double v) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=bankDeposit(String, double)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse isBankOwner(String s, String s1) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=isBankOwner(String, String)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse isBankOwner(String s, OfflinePlayer offlinePlayer) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=isBankOwner(String, OfflinePlayer)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse isBankMember(String s, String s1) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=isBankMember(String, String)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public EconomyResponse isBankMember(String s, OfflinePlayer offlinePlayer) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=isBankMember(String, OfflinePlayer)", main);
         return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "ElementalEconomy does not have Vault bank support.");
     }
 
     @Override
     public List<String> getBanks() {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=getBanks()", main);
         return null;
     }
 
@@ -407,6 +432,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public boolean createPlayerAccount(String playerName) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=createPlayerAccount(String)", main);
         return false;
     }
 
@@ -418,6 +444,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=createPlayerAccount(OfflinePlayer)", main);
         return false;
     }
 
@@ -431,6 +458,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public boolean createPlayerAccount(String playerName, String worldName) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=createPlayerAccount(String, String)", main);
         return false;
     }
 
@@ -443,6 +471,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer, String worldName) {
+        Utils.sendSuppressableWarning(SuppressableWarning.UNSUPPORTED_VAULT_METHOD_CALL, "method=createPlayerAccount(OfflinePlayer, String)", main);
         return false;
     }
 }

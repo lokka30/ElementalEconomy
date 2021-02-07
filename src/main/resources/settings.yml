@@ -13,13 +13,14 @@
 #
 # Happy configuring!
 
+# Configure the storage system ElementalEconomy uses to store accounts and their balances.
 storage:
 
   # How should ElementalEconomy store balances?
   #
   # Note if changing:
-  # - Balances do not transfer from previous storage solution.
-  # - Balances do not clear from your previous storage solution.
+  # - Balances do not transfer from your previous storage solution.
+  # - Balances do not wipe from your previous storage solution.
   #   If you switch to a storage method previously used then
   #   the balances stored there will be used.
   # - If using MySQL, ensure you have the database details filled
@@ -50,16 +51,21 @@ storage:
   #
   method: SQLite
 
-  # If using MySQL, you must change these settings. Otherwise, you should ignore them.
+
+  # You must change these settings if you are using MySQL. If you are not using MySQL then changing these
+  # settings will make no effect. Triple-check that you have set the correct values below BEFORE starting
+  # the plugin up.
   mysql-settings:
     username: 'user123'
     password: 'pass123'
     database: 'minecraft'
     host: 'localhost:3306'
 
+
 # A quiet async update checker that does its job once when the plugin starts up and then leaves you alone. This
 # feature only works on 1.11+ servers, please disable it if your server is running a version older than 1.11.
 check-for-updates: true
+
 
 # ** It is not recommended to suppress ElementalEconomy warnings. **
 # If ElementalEconomy is annoying you with warnings, then there is a high chance you can disable them here.
@@ -67,12 +73,27 @@ suppressed-warnings:
 
   # If 'false', ElementalEconomy will complain when other plugins access deprecated Vault methods.
   # Please inform the plugin developer(s) at fault to make the switch to non-reprecated Vault methods.
-  deprecated-vault-method-calls: false
+  DEPRECATED_VAULT_METHOD_CALL: false
+
+  # If 'false', ElementalEconomy will complain when other plugins access Vault methods that ElementalEconomy does not support,
+  #
+  # If you are receiving errors regarding banks:
+  #  - The plugin trying to access Vault's bank methods is disregarding if the economy provider (i.e. ElementalEconomy) has bank support.
+  #  - Please inform the plugin developer(s) of the plugin that is causing this warning with this information.
+  #
+  # If you are receiving errors regarding createPlayerAccount:
+  #  - You have a plugin installed that is trying to tell ElementalEconomy to make a new account for a player, but
+  #    ElementalEconomy does this automatically anyways. Vault's documentation tells developers that the methods
+  #    are implementation-specific anyways.
+  #  - Please inform the developer(s) of the plugin at fault to add an ability to toggle this behaviour.
+  UNSUPPORTED_VAULT_METHOD_CALL: false
+
 
 # This is for developers to use, server owners should ignore this.
 # (Prints a *ton* of spam to the console which is useful for developers to get information towards fixing bugs)
 # Note for developers: Add the debug prefix to this array for it to be logged. Ask a lead developer if unsure.
 debug: [ ]
+
 
 # Do not touch this unless you know what you're doing!
 file-version: 1
