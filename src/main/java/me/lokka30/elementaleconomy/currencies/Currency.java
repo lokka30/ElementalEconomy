@@ -22,4 +22,14 @@ public class Currency {
     public final String displayFormat; // e.g. $%decimalFormat%
     public final int truncateDigits; // e.g. 2 (50.12 instead of 50.123456)
     public final String[] wordFormat; // [0] = singular, [1] = plural; can be null if unspecified.
+
+    public String getFormattedAmount(BigDecimal amount) {
+        String formattedAmount = displayFormat
+                .replace("%decimalFormat%", decimalFormat.format(amount.doubleValue()));
+
+        if (formattedAmount.contains("%wordFormat%"))
+            formattedAmount = formattedAmount.replace("%wordFormat%", amount.doubleValue() == 1.00 ? wordFormat[0] : wordFormat[1]);
+
+        return formattedAmount;
+    }
 }

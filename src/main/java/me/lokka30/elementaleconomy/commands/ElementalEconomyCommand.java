@@ -24,8 +24,6 @@ public class ElementalEconomyCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        sender.sendMessage("Command is incomplete.");
-
         if (!sender.hasPermission("elementaleconomy.command.elementaleconomy")) {
             sender.sendMessage("No permission.");
             return true;
