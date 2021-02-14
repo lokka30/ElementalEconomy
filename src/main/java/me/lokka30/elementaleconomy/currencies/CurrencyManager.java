@@ -15,8 +15,8 @@ public class CurrencyManager {
         this.main = main;
     }
 
-    public HashMap<Integer, Currency> currencyIdMap = new HashMap<>();
-    public HashMap<String, Integer> currencyNameIdMap = new HashMap<>();
+    public final HashMap<Integer, Currency> currencyIdMap = new HashMap<>();
+    public final HashMap<String, Integer> currencyNameIdMap = new HashMap<>();
 
     /**
      * Read the currencies.yml file and insert all the currency data into the 3 HashMaps above.

@@ -19,6 +19,7 @@ public class SQLiteStorage implements Storage {
     elemecon_balances (id, currency, balance)
      */
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final ElementalEconomy main;
 
     public SQLiteStorage(final ElementalEconomy main) {

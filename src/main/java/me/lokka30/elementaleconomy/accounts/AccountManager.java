@@ -10,7 +10,7 @@ public class AccountManager {
     private final ElementalEconomy main;
     public AccountManager(ElementalEconomy main) { this.main = main; }
 
-    public HashMap<UUID, Account> cachedAccounts = new HashMap<>();
+    public final HashMap<UUID, Account> cachedAccounts = new HashMap<>();
 
     public Account getAccount(UUID uuid) {
         return cachedAccounts.getOrDefault(uuid, main.storageManager.storage.getAccount(uuid));

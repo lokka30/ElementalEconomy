@@ -18,7 +18,7 @@ public class Account {
     private final int id;
     private final UUID uuid;
     @SuppressWarnings("FieldMayBeFinal")
-    private HashMap<Integer, BigDecimal> currencyBalanceMap;
+    private final HashMap<Integer, BigDecimal> currencyBalanceMap;
 
 
 

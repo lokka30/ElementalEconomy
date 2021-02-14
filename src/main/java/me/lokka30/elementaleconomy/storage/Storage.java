@@ -47,9 +47,9 @@ public interface Storage {
     /**
      * Set the account's balance of certain currency to a value
      *
-     * @param accountId account id
-     * @param currency  currency
-     * @param balance   amount
+     * @param accountId  account id
+     * @param currencyId currency
+     * @param balance    amount
      */
     void setBalance(int accountId, int currencyId, BigDecimal balance);
 
@@ -57,7 +57,7 @@ public interface Storage {
      * This method is unused since balances are cached when an account is loaded via getAccount(UUID).
      *
      * @param accountId account id
-     * @param currency  currency
+     * @param currencyId  currency
      * @return balance
      */
     @SuppressWarnings("unused")
