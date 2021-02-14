@@ -20,7 +20,36 @@ public class EconomyCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        sender.sendMessage("Command is incomplete.");
+
+        if (!sender.hasPermission("elementaleconomy.command.economy")) {
+            sender.sendMessage("No permission.");
+            return true;
+        }
+
+        if (args.length == 1) {
+            switch (args[0].toUpperCase()) {
+                case "GIVE":
+                case "ADD":
+                    sender.sendMessage("Command is incomplete. (GIVE)");
+                    break;
+                case "TAKE":
+                case "REMOVE":
+                    sender.sendMessage("Command is incomplete. (TAKE)");
+                    break;
+                case "SET":
+                    sender.sendMessage("Command is incomplete. (SET)");
+                    break;
+                case "RESET":
+                    sender.sendMessage("Command is incomplete. (RESET)");
+                    break;
+                default:
+                    sender.sendMessage("Usage: /" + label + " <give|add/take|remove/set/reset> <player> ...");
+                    break;
+            }
+        } else {
+            sender.sendMessage("Usage: /" + label + " <give|add/take|remove/set/reset> <player> ...");
+        }
+
         return true;
     }
 
@@ -36,6 +65,7 @@ public class EconomyCommand implements TabExecutor {
                 if (sender.hasPermission("elementaleconomy.command.economy.set")) suggestions.add("set");
             } else {
                 switch (args[0].toUpperCase()) {
+                    // give|add, take|remove & set all share the same args, which is why there is no definite 'break' except for under 'SET'.
                     case "GIVE":
                     case "ADD":
                         if (!sender.hasPermission("elementaleconomy.command.economy.give")) break;

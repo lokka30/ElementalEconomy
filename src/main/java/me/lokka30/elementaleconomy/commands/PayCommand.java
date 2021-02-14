@@ -20,7 +20,17 @@ public class PayCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        sender.sendMessage("Command is incomplete.");
+        if (!sender.hasPermission("elementaleconomy.command.pay")) {
+            sender.sendMessage("No permission.");
+            return true;
+        }
+
+        if (args.length == 2 || args.length == 3) {
+            sender.sendMessage("Command is incomplete.");
+        } else {
+            sender.sendMessage("Usage: /" + label + " <player> <amount> [currency]");
+        }
+
         return true;
     }
 

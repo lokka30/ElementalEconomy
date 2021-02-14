@@ -19,7 +19,13 @@ public class BaltopCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!sender.hasPermission("elementaleconomy.command.baltop")) {
+            sender.sendMessage("No permission.");
+            return true;
+        }
+
         sender.sendMessage("Command is incomplete.");
+
         return true;
     }
 
