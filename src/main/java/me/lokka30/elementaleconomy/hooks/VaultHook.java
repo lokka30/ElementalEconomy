@@ -2,6 +2,7 @@ package me.lokka30.elementaleconomy.hooks;
 
 import me.lokka30.elementaleconomy.ElementalEconomy;
 import me.lokka30.elementaleconomy.currencies.Currency;
+import me.lokka30.elementaleconomy.misc.DebugMessageType;
 import me.lokka30.elementaleconomy.misc.SuppressableWarning;
 import me.lokka30.elementaleconomy.utils.Utils;
 import net.milkbowl.vault.economy.Economy;
@@ -259,11 +260,17 @@ public class VaultHook implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
 
-        if (hasAccount(offlinePlayer) && has(offlinePlayer, amount)) {
-            main.accountManager.getAccount(offlinePlayer.getUniqueId()).withdraw(getExternalCurrency().id, BigDecimal.valueOf(amount));
-            return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, null);
+        if (hasAccount(offlinePlayer)) {
+            if (has(offlinePlayer, amount)) {
+                main.accountManager.getAccount(offlinePlayer.getUniqueId()).withdraw(getExternalCurrency().id, BigDecimal.valueOf(amount));
+                return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, null);
+            } else {
+                Utils.logger.error("A plugin (NOT ElementalEconomy) tried to run Vault's withdrawPlayer but the player doesn't have enough money to withdraw. Player: " + offlinePlayer.getName());
+                return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.FAILURE, "Oversized withdrawal");
+            }
         } else {
-            return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.FAILURE, "Account non-existent or oversized withdrawal");
+            Utils.logger.error("A plugin (NOT ElementalEconomy) tried to run Vault's withdrawPlayer but the player doesn't have an account. Player: " + offlinePlayer.getName());
+            return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.FAILURE, "Account non-existent");
         }
     }
 
@@ -318,8 +325,14 @@ public class VaultHook implements Economy {
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double amount) {
         if (hasAccount(offlinePlayer)) {
             main.accountManager.getAccount(offlinePlayer.getUniqueId()).deposit(getExternalCurrency().id, BigDecimal.valueOf(amount));
+
+            Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "VaultHook#depositPlayer ran:");
+            Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "&8 - &7Username: " + offlinePlayer.getName());
+            Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "&8 - &7Amount: " + amount);
+
             return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, null);
         } else {
+            Utils.logger.error("A plugin (NOT ElementalEconomy) tried to run Vault's depositPlayer but the player doesn't have an account. Player: " + offlinePlayer.getName());
             return new EconomyResponse(amount, 0.0, EconomyResponse.ResponseType.FAILURE, "Attempted to deposit " + amount + " but " + offlinePlayer.getUniqueId().toString() + " does not have an economy account");
         }
     }
