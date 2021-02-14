@@ -1,5 +1,6 @@
 package me.lokka30.elementaleconomy;
 
+import me.lokka30.elementaleconomy.commands.*;
 import me.lokka30.elementaleconomy.listeners.PlayerJoinListener;
 import me.lokka30.elementaleconomy.listeners.PlayerQuitListener;
 import me.lokka30.elementaleconomy.misc.PossibleIncompatibility;
@@ -14,6 +15,7 @@ import org.bukkit.plugin.ServicePriority;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class Companion {
 
@@ -101,6 +103,14 @@ public class Companion {
         Utils.logger.info("&f(Listeners) &7Registering listeners...");
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(main), main);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(main), main);
+    }
+
+    public void registerCommands() {
+        Objects.requireNonNull(main.getCommand("balance")).setExecutor(new BalanceCommand(main));
+        Objects.requireNonNull(main.getCommand("baltop")).setExecutor(new BaltopCommand(main));
+        Objects.requireNonNull(main.getCommand("economy")).setExecutor(new EconomyCommand(main));
+        Objects.requireNonNull(main.getCommand("elementaleconomy")).setExecutor(new ElementalEconomyCommand(main));
+        Objects.requireNonNull(main.getCommand("pay")).setExecutor(new PayCommand(main));
     }
 
     public void hookExternalPlugins() {

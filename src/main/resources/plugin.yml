@@ -19,11 +19,39 @@ softdepend: [ 'Vault' ]
 
 # Other information for Bukkit:
 main: me.lokka30.elementaleconomy.ElementalEconomy
+# 1.13 is specified for 1.13+ compatibilty, as for example, 1.16 would not allow
+# 1.13-1.15 servers to run ElemEcon. The plugin should be compiled with the
+# latest version of Spigot however.
 api-version: '1.13'
 
-# Note for developers on api-verison: Although the plugin is compiled with the latest stable version of SpigotMC,
-# 1.13 is specified as the api-version to ensure the plugin loads on versions older than what the plugin is compiled
-# on. For example, loading the plugin on a 1.13 server with an api-version of 1.16 (api version > server version),
-# the plugin will simply refuse to start, as this is a compatibility measure done by the server software. This is
-# the only way around it, and it does not cause any issues. It is possible to not specify 'api-version' although
-# the server software will send a warning message to the console which a handful of server owners don't want to see.
+# These are the commands that ElementalEconomy registers.
+commands:
+
+  # /balance
+  balance:
+    description: View a player's balance.
+    usage: /<command> [player] [currency]
+    aliases: [ bal, money ]
+
+  # /baltop
+  baltop:
+    description: View the leaderboard of top balances.
+    usage: /<command> [currency] [page]
+    aliases: [ balancetop, topbal, topbalances, topbalance ]
+
+  # /economy
+  economy:
+    description: Manage accounts' balances.
+    usage: /<command> <give|add/take|remove/set/reset> <...>
+    aliases: [ eco, econ ]
+
+  # /elementaleconomy
+  elementaleconomy:
+    description: View information about ElementalEconomy or manage parts of it, such as creating backups or reloading the plugin.
+    usage: /<command> <info/reload/backup/compatibility>
+    aliases: [ elemecon, elementalecon, elemeconomy, eeconomy ]
+
+  # /pay
+  pay:
+    description: Transfer money from your account to another's.
+    usage: /<command> <player> <amount> [currency]
