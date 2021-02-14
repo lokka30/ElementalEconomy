@@ -89,9 +89,9 @@ suppressed-warnings:
   UNSUPPORTED_VAULT_METHOD_CALL: false
 
 
-# This is for developers to use, server owners should ignore this.
-# (Prints a *ton* of spam to the console which is useful for developers to get information towards fixing bugs)
-# Note for developers: Add the debug prefix to this array for it to be logged. Ask a lead developer if unsure.
+# *** This is for developers to use, server owners should ignore this. ***
+# Debugging prints a *ton* of spam to the console which is useful for developers to get information towards fixing bugs.
+# Note for developers: Add the debug message type to this array for it to be logged (in UPPERCASE). Ask lokka30 if unsure.
 debug: [ ]
 
 

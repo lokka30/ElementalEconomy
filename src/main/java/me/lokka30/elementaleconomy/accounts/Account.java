@@ -1,6 +1,8 @@
 package me.lokka30.elementaleconomy.accounts;
 
 import me.lokka30.elementaleconomy.ElementalEconomy;
+import me.lokka30.elementaleconomy.misc.DebugMessageType;
+import me.lokka30.elementaleconomy.utils.Utils;
 import org.apache.commons.lang.Validate;
 
 import java.math.BigDecimal;
@@ -56,6 +58,10 @@ public class Account {
         currencyBalanceMap.put(currencyId, balance);
         saveAccountToAccountMap();
         ElementalEconomy.getInstance().storageManager.storage.setBalance(id, currencyId, balance);
+
+        Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "Account#setBalance ran:");
+        Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "&8 - &7Currency ID: " + currencyId);
+        Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "&8 - &7New balance: ~" + balance.floatValue());
     }
 
     public void deposit(int currencyId, BigDecimal amount) {

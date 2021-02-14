@@ -1,6 +1,7 @@
 package me.lokka30.elementaleconomy.utils;
 
 import me.lokka30.elementaleconomy.ElementalEconomy;
+import me.lokka30.elementaleconomy.misc.DebugMessageType;
 import me.lokka30.elementaleconomy.misc.SuppressableWarning;
 import me.lokka30.microlib.MicroLogger;
 
@@ -27,6 +28,12 @@ public class Utils {
     public static void sendSuppressableWarning(SuppressableWarning suppressableWarning, String extraInformation, ElementalEconomy main) {
         if (!main.settings.getConfig().getBoolean("suppressed-warnings." + suppressableWarning.toString(), false)) {
             logger.warning(suppressableWarning.warningMsg.replace("%extraInformation%", extraInformation));
+        }
+    }
+
+    public static void sendDebugMessage(DebugMessageType debugMessageType, String msg) {
+        if (ElementalEconomy.getInstance().settings.getConfig().getStringList("debug").contains(debugMessageType.toString())) {
+            logger.info("&8[DEBUG: " + debugMessageType.toString() + "]: &7" + msg);
         }
     }
 }
