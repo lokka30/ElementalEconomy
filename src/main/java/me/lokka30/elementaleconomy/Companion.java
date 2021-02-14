@@ -1,5 +1,7 @@
 package me.lokka30.elementaleconomy;
 
+import me.lokka30.elementaleconomy.listeners.PlayerJoinListener;
+import me.lokka30.elementaleconomy.listeners.PlayerQuitListener;
 import me.lokka30.elementaleconomy.misc.PossibleIncompatibility;
 import me.lokka30.elementaleconomy.utils.Utils;
 import me.lokka30.microlib.UpdateChecker;
@@ -93,6 +95,12 @@ public class Companion {
     public void loadCurrencies() {
         Utils.logger.info("&f(Currencies) &7Loading currencies...");
         main.currencyManager.loadCurrencies();
+    }
+
+    public void registerListeners() {
+        Utils.logger.info("&f(Listeners) &7Registering listeners...");
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(main), main);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(main), main);
     }
 
     public void hookExternalPlugins() {

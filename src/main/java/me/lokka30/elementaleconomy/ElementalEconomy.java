@@ -49,6 +49,7 @@ public class ElementalEconomy extends JavaPlugin {
         companion.loadFiles();
         companion.loadStorage();
         companion.loadCurrencies();
+        companion.registerListeners();
         companion.hookExternalPlugins();
 
 
