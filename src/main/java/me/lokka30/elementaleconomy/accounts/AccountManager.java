@@ -1,6 +1,7 @@
 package me.lokka30.elementaleconomy.accounts;
 
 import me.lokka30.elementaleconomy.ElementalEconomy;
+
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public class AccountManager {
     }
 
     public boolean accountExists(UUID uuid) {
-        return main.storageManager.storage.accountExists(uuid);
+        return cachedAccounts.containsKey(uuid) || main.storageManager.storage.accountExists(uuid);
     }
 
     public void createOrResetAccount(UUID uuid) {

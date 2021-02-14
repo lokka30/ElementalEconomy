@@ -48,7 +48,11 @@ public class CurrencyManager {
      * @return the currency
      */
     public Currency getCurrency(String name) {
-        return currencyIdMap.get(currencyNameIdMap.get(name));
+        return getCurrency(currencyNameIdMap.get(name));
+    }
+
+    public Currency getCurrency(int currencyId) {
+        return currencyIdMap.get(currencyId);
     }
 
     /**

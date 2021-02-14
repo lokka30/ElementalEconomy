@@ -2,9 +2,10 @@
 An economy provider plugin for SpigotMC servers.
 
 ## Work in Progress
-This plugin is currently work in progress. See the [to-do list](https://trello.com/b/xAVFFEXQ/plugins-to-do-list) if you are interested in what's left to complete.
+This plugin is currently work in progress. See the [to-do list](https://trello.com/b/xAVFFEXQ/plugins-to-do-list) if you
+are interested in what's left to complete.
 
-This page is currently work in progress, so many of the links will not work.
+This page is currently work in progress, so the SpigotMC links are unavailable.
 
 ## Welcome!
 Here are some links you might be looking for:

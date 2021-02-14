@@ -6,7 +6,6 @@ import co.aikar.idb.DatabaseOptions;
 import co.aikar.idb.PooledDatabaseOptions;
 import me.lokka30.elementaleconomy.ElementalEconomy;
 import me.lokka30.elementaleconomy.accounts.Account;
-import me.lokka30.elementaleconomy.currencies.Currency;
 import me.lokka30.elementaleconomy.utils.Utils;
 
 import java.math.BigDecimal;
@@ -54,7 +53,7 @@ public class MySQLStorage implements Storage {
     public Account getAccount(UUID uuid) {
 
         final int id = -1;
-        final HashMap<Currency, BigDecimal> currencyBalanceMap = new HashMap<>();
+        final HashMap<Integer, BigDecimal> currencyBalanceMap = new HashMap<>();
 
         //TODO get id and currencyMap from database
 
@@ -80,12 +79,12 @@ public class MySQLStorage implements Storage {
     }
 
     @Override
-    public void setBalance(int accountId, Currency currency, BigDecimal balance) {
+    public void setBalance(int accountId, int currencyId, BigDecimal balance) {
 
     }
 
     @Override
-    public BigDecimal getBalance(int accountId, Currency currency) {
+    public BigDecimal getBalance(int accountId, int currencyId) {
         return null;
     }
 }

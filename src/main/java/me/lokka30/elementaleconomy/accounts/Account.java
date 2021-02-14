@@ -1,7 +1,6 @@
 package me.lokka30.elementaleconomy.accounts;
 
 import me.lokka30.elementaleconomy.ElementalEconomy;
-import me.lokka30.elementaleconomy.currencies.Currency;
 import org.apache.commons.lang.Validate;
 
 import java.math.BigDecimal;
@@ -10,7 +9,7 @@ import java.util.UUID;
 
 public class Account {
 
-    public Account(int id, UUID uuid, HashMap<Currency, BigDecimal> currencyBalanceMap) {
+    public Account(int id, UUID uuid, HashMap<Integer, BigDecimal> currencyBalanceMap) {
         this.id = id;
         this.uuid = uuid;
         this.currencyBalanceMap = currencyBalanceMap;
@@ -19,7 +18,7 @@ public class Account {
     private final int id;
     private final UUID uuid;
     @SuppressWarnings("FieldMayBeFinal")
-    private HashMap<Currency, BigDecimal> currencyBalanceMap;
+    private HashMap<Integer, BigDecimal> currencyBalanceMap;
 
 
 
@@ -33,7 +32,9 @@ public class Account {
         return uuid;
     }
 
-    public HashMap<Currency, BigDecimal> getCurrencyBalanceMap() { return currencyBalanceMap; }
+    public HashMap<Integer, BigDecimal> getCurrencyBalanceMap() {
+        return currencyBalanceMap;
+    }
 
 
 
@@ -41,36 +42,36 @@ public class Account {
     Methods to manage the account's balances
      */
 
-    public BigDecimal getBalance(Currency currency) {
-        if(!currencyBalanceMap.containsKey(currency)) {
-            currencyBalanceMap.put(currency, currency.startingBalance);
+    public BigDecimal getBalance(int currencyId) {
+        if (!currencyBalanceMap.containsKey(currencyId)) {
+            currencyBalanceMap.put(currencyId, ElementalEconomy.getInstance().currencyManager.getCurrency(currencyId).startingBalance);
         }
 
-        return currencyBalanceMap.get(currency);
+        return currencyBalanceMap.get(currencyId);
     }
 
-    public void setBalance(Currency currency, BigDecimal balance) {
+    public void setBalance(int currencyId, BigDecimal balance) {
         Validate.isTrue(balance.doubleValue() >= 0, "Amount must be greater than or equal to 0.");
-        currencyBalanceMap.remove(currency);
-        currencyBalanceMap.put(currency, balance);
+        currencyBalanceMap.remove(currencyId);
+        currencyBalanceMap.put(currencyId, balance);
         saveAccountToAccountMap();
-        ElementalEconomy.getInstance().storageManager.storage.setBalance(id, currency, balance);
+        ElementalEconomy.getInstance().storageManager.storage.setBalance(id, currencyId, balance);
     }
 
-    public void deposit(Currency currency, BigDecimal amount) {
+    public void deposit(int currencyId, BigDecimal amount) {
         Validate.isTrue(amount.doubleValue() > 0, "Amount must be greater than 0.");
-        setBalance(currency, getBalance(currency).add(amount));
+        setBalance(currencyId, getBalance(currencyId).add(amount));
     }
 
-    public void withdraw(Currency currency, BigDecimal amount) {
-        BigDecimal balance = getBalance(currency).subtract(amount);
+    public void withdraw(int currencyId, BigDecimal amount) {
+        BigDecimal balance = getBalance(currencyId).subtract(amount);
         Validate.isTrue(balance.doubleValue() >= 0, "Balance after withdrawal must be greater than or equal to 0.");
-        setBalance(currency, balance);
+        setBalance(currencyId, balance);
     }
 
-    public boolean has(Currency currency, BigDecimal amount) {
+    public boolean has(int currencyId, BigDecimal amount) {
         Validate.isTrue(amount.doubleValue() > 0, "Amount must be greater than 0.");
-        return amount.compareTo(getBalance(currency)) <= 0;
+        return amount.compareTo(getBalance(currencyId)) <= 0;
     }
 
 

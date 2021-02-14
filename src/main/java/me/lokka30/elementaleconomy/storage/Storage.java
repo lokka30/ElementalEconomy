@@ -1,7 +1,6 @@
 package me.lokka30.elementaleconomy.storage;
 
 import me.lokka30.elementaleconomy.accounts.Account;
-import me.lokka30.elementaleconomy.currencies.Currency;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -52,7 +51,7 @@ public interface Storage {
      * @param currency  currency
      * @param balance   amount
      */
-    void setBalance(int accountId, Currency currency, BigDecimal balance);
+    void setBalance(int accountId, int currencyId, BigDecimal balance);
 
     /**
      * This method is unused since balances are cached when an account is loaded via getAccount(UUID).
@@ -62,5 +61,5 @@ public interface Storage {
      * @return balance
      */
     @SuppressWarnings("unused")
-    BigDecimal getBalance(int accountId, Currency currency);
+    BigDecimal getBalance(int accountId, int currencyId);
 }

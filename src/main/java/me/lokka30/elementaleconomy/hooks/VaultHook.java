@@ -151,7 +151,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return main.accountManager.getAccount(offlinePlayer.getUniqueId()).getBalance(getExternalCurrency()).doubleValue();
+        return main.accountManager.getAccount(offlinePlayer.getUniqueId()).getBalance(getExternalCurrency().id).doubleValue();
     }
 
     /**
@@ -205,7 +205,7 @@ public class VaultHook implements Economy {
      */
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double amount) {
-        return main.accountManager.getAccount(offlinePlayer.getUniqueId()).has(getExternalCurrency(), BigDecimal.valueOf(amount));
+        return main.accountManager.getAccount(offlinePlayer.getUniqueId()).has(getExternalCurrency().id, BigDecimal.valueOf(amount));
     }
 
     /**
@@ -260,7 +260,7 @@ public class VaultHook implements Economy {
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
 
         if (hasAccount(offlinePlayer) && has(offlinePlayer, amount)) {
-            main.accountManager.getAccount(offlinePlayer.getUniqueId()).withdraw(getExternalCurrency(), BigDecimal.valueOf(amount));
+            main.accountManager.getAccount(offlinePlayer.getUniqueId()).withdraw(getExternalCurrency().id, BigDecimal.valueOf(amount));
             return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, null);
         } else {
             return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.FAILURE, "Account non-existent or oversized withdrawal");
@@ -317,7 +317,7 @@ public class VaultHook implements Economy {
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double amount) {
         if (hasAccount(offlinePlayer)) {
-            main.accountManager.getAccount(offlinePlayer.getUniqueId()).deposit(getExternalCurrency(), BigDecimal.valueOf(amount));
+            main.accountManager.getAccount(offlinePlayer.getUniqueId()).deposit(getExternalCurrency().id, BigDecimal.valueOf(amount));
             return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, null);
         } else {
             return new EconomyResponse(amount, 0.0, EconomyResponse.ResponseType.FAILURE, "Attempted to deposit " + amount + " but " + offlinePlayer.getUniqueId().toString() + " does not have an economy account");

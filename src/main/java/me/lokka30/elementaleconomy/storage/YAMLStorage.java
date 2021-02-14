@@ -50,17 +50,17 @@ public class YAMLStorage implements Storage {
 
     @Override
     public Account getAccount(UUID uuid) {
-        final int id = dataFile.getConfig().getInt("accounts." + uuid.toString() + ".id");
+        final int accountId = dataFile.getConfig().getInt("accounts." + uuid.toString() + ".id");
 
-        HashMap<Currency, BigDecimal> balanceMap = new HashMap<>();
+        HashMap<Integer, BigDecimal> balanceMap = new HashMap<>();
         for (Currency currency : main.currencyManager.currencyIdMap.values()) {
-            if (dataFile.getConfig().contains("balances." + id + "." + currency.id)) {
-                final BigDecimal balance = BigDecimal.valueOf(dataFile.getConfig().getDouble("balances." + id + "." + currency.id));
-                balanceMap.put(currency, balance);
+            if (dataFile.getConfig().contains("balances." + accountId + "." + currency.id)) {
+                final BigDecimal balance = BigDecimal.valueOf(dataFile.getConfig().getDouble("balances." + accountId + "." + currency.id));
+                balanceMap.put(currency.id, balance);
             }
         }
 
-        return new Account(id, uuid, balanceMap);
+        return new Account(accountId, uuid, balanceMap);
     }
 
     @Override
@@ -73,8 +73,8 @@ public class YAMLStorage implements Storage {
         dataFile.getConfig().set("accounts." + account.getUUID().toString() + ".id", account.getId());
         dataFile.getConfig().set("accounts." + account.getUUID().toString() + ".lastUsername", Bukkit.getOfflinePlayer(account.getUUID()).getName());
 
-        for (Currency currency : account.getCurrencyBalanceMap().keySet()) {
-            dataFile.getConfig().set("balances." + account.getId() + "." + currency.id, account.getCurrencyBalanceMap().get(currency).doubleValue());
+        for (Integer currencyId : account.getCurrencyBalanceMap().keySet()) {
+            dataFile.getConfig().set("balances." + account.getId() + "." + currencyId, account.getCurrencyBalanceMap().get(currencyId).doubleValue());
         }
 
         saveDataCfg();
@@ -103,14 +103,14 @@ public class YAMLStorage implements Storage {
     }
 
     @Override
-    public void setBalance(int accountId, Currency currency, BigDecimal balance) {
-        dataFile.getConfig().set("balances." + accountId + "." + currency.id, balance.doubleValue());
+    public void setBalance(int accountId, int currencyId, BigDecimal balance) {
+        dataFile.getConfig().set("balances." + accountId + "." + currencyId, balance.doubleValue());
         saveDataCfg();
     }
 
     @Override
-    public BigDecimal getBalance(int accountId, Currency currency) {
-        final String path = "balances." + accountId + "." + currency.id;
+    public BigDecimal getBalance(int accountId, int currencyId) {
+        final String path = "balances." + accountId + "." + currencyId;
 
         if (dataFile.getConfig().contains(path)) {
             return BigDecimal.valueOf(dataFile.getConfig().getDouble(path));
