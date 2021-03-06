@@ -99,6 +99,11 @@ public class Companion {
         main.currencyManager.loadCurrencies();
     }
 
+    public void cacheBaltop() {
+        Utils.logger.info("&f(Baltop) &7Caching baltop...");
+        main.baltopManager.resetCache();
+    }
+
     public void registerListeners() {
         Utils.logger.info("&f(Listeners) &7Registering listeners...");
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(main), main);
@@ -106,6 +111,7 @@ public class Companion {
     }
 
     public void registerCommands() {
+        Utils.logger.info("&f(Listeners) &7Registering commands...");
         Objects.requireNonNull(main.getCommand("balance")).setExecutor(new BalanceCommand(main));
         Objects.requireNonNull(main.getCommand("baltop")).setExecutor(new BaltopCommand(main));
         Objects.requireNonNull(main.getCommand("economy")).setExecutor(new EconomyCommand(main));

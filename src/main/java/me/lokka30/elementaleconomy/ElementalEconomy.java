@@ -1,6 +1,7 @@
 package me.lokka30.elementaleconomy;
 
 import me.lokka30.elementaleconomy.accounts.AccountManager;
+import me.lokka30.elementaleconomy.currencies.BaltopManager;
 import me.lokka30.elementaleconomy.currencies.CurrencyManager;
 import me.lokka30.elementaleconomy.hooks.VaultHook;
 import me.lokka30.elementaleconomy.storage.StorageManager;
@@ -27,6 +28,7 @@ public class ElementalEconomy extends JavaPlugin {
     public final AccountManager accountManager = new AccountManager(this);
     public final CurrencyManager currencyManager = new CurrencyManager(this);
     public final StorageManager storageManager = new StorageManager(this);
+    public final BaltopManager baltopManager = new BaltopManager(this);
 
     // Here are the configuration files. These can optionally be edited by the server owner to adapt the plugin to their liking.
     // Using the 'YamlConfigFile' class from MicroLib. To get the actual config, just run YamlConfigFile#getConfig
@@ -49,6 +51,7 @@ public class ElementalEconomy extends JavaPlugin {
         companion.loadFiles();
         companion.loadStorage();
         companion.loadCurrencies();
+        companion.cacheBaltop();
         companion.registerListeners();
         companion.registerCommands();
         companion.hookExternalPlugins();
