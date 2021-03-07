@@ -70,6 +70,7 @@ public class YAMLStorage implements Storage {
 
     @Override
     public void saveAccount(Account account) {
+        dataFile.getConfig().set("accounts.id-uuid-map." + account.getId(), account.getUUID().toString());
         dataFile.getConfig().set("accounts." + account.getUUID().toString() + ".id", account.getId());
         dataFile.getConfig().set("accounts." + account.getUUID().toString() + ".lastUsername", Bukkit.getOfflinePlayer(account.getUUID()).getName());
 

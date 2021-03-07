@@ -6,8 +6,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
 
 public class BaltopCommand implements TabExecutor {
 
@@ -24,7 +26,78 @@ public class BaltopCommand implements TabExecutor {
             return true;
         }
 
-        sender.sendMessage("Command is incomplete.");
+        if (args.length > 2) {
+            sender.sendMessage("Usage: /" + label + " [currency] [page]");
+            return true;
+        }
+
+        if (!main.settings.getConfig().getBoolean("baltop.enabled", true)) {
+            sender.sendMessage("Baltop is disabled on this server.");
+            return true;
+        }
+
+        int currencyId = main.currencyManager.getDefaultCurrency().id;
+        if (args.length > 0) {
+            if (main.currencyManager.currencyNameIdMap.containsKey(args[0].toLowerCase())) {
+                currencyId = main.currencyManager.currencyNameIdMap.get(args[0].toLowerCase());
+            } else {
+                sender.sendMessage("Invalid currency %currencyName%".replace("%currencyName%", args[0]));
+                return true;
+            }
+        }
+
+        int page = 1;
+        if (args.length > 1) {
+            if (Utils.isInteger(args[1])) {
+                page = Integer.parseInt(args[1]);
+                if (page < 1) {
+                    sender.sendMessage("%value% is not a valid page: must be a positive integer".replace("%value%", args[1]));
+                    return true;
+                }
+            } else {
+                sender.sendMessage("%value% is not a valid page: must be a positive integer".replace("%value%", args[1]));
+                return true;
+            }
+        }
+
+        SortedMap<Integer, BigDecimal> topBalances = main.baltopManager.topBalances.get(currencyId);
+        int usersPerPage = main.settings.getConfig().getInt("baltop.users-per-page", 10);
+        int index = 1;
+        int minIndex = ((page - 1) * usersPerPage) + 1;
+        int maxIndex = minIndex + usersPerPage - 1;
+        String currencyName = main.currencyManager.getCurrency(currencyId).name;
+
+        if (minIndex > topBalances.size()) {
+            sender.sendMessage("No users to display on this page.");
+            return true;
+        }
+
+        sender.sendMessage("Balances for currency %currencyName%, page %page%:"
+                .replace("%currencyName%", currencyName)
+                .replace("%page%", page + ""));
+        sender.sendMessage("+------------------------------+");
+
+        for (int accountId : topBalances.keySet()) {
+            // min index
+            if (index < minIndex) {
+                index++;
+                continue;
+            }
+
+            // max index
+            if (index > maxIndex) {
+                sender.sendMessage("+------------------------------+");
+                sender.sendMessage("... Run /" + label + " " + currencyName + " " + (page + 1) + " to view the next page.");
+                break;
+            }
+
+            String username = main.storageManager.storage.getUsernameFromAccountId(accountId);
+            String formattedBalance = main.currencyManager.getCurrency(currencyId).getFormattedAmount(topBalances.get(accountId));
+
+            sender.sendMessage(index + ". " + username + ": " + formattedBalance);
+
+            index++;
+        }
 
         return true;
     }

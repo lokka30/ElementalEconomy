@@ -4,6 +4,7 @@ import me.lokka30.elementaleconomy.ElementalEconomy;
 import me.lokka30.elementaleconomy.misc.DebugMessageType;
 import me.lokka30.elementaleconomy.utils.Utils;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -28,11 +29,43 @@ public class BaltopManager {
      */
     public void resetCache() {
         Utils.sendDebugMessage(DebugMessageType.BALTOP_CACHING, "Resetting baltop cache");
-        new BukkitRunnable() {
+
+        if (main.settings.getConfig().getBoolean("baltop.enabled", true)) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    topBalances = main.storageManager.storage.getTopBalances();
+                }
+            }.runTaskAsynchronously(main);
+        } else {
+            Utils.sendDebugMessage(DebugMessageType.BALTOP_CACHING, "Skipping resetCache, baltop disabled in settings");
+        }
+    }
+
+    public void startAutoCacheTask() {
+        if (!main.settings.getConfig().getBoolean("baltop.enabled", true)) {
+            Utils.sendDebugMessage(DebugMessageType.BALTOP_CACHING, "Skipping startAutoCacheTask, baltop disabled in settings");
+            return;
+        }
+
+        int minutes = main.settings.getConfig().getInt("baltop.auto-cache-task-period", 15);
+
+        if (minutes <= 0) {
+            Utils.sendDebugMessage(DebugMessageType.BALTOP_CACHING, "Auto cache task disabled in settings.");
+            return;
+        }
+
+        long ticks = 20L * 60 * minutes;
+
+        if (autoCacheTask != null) autoCacheTask.cancel();
+
+        autoCacheTask = new BukkitRunnable() {
             @Override
             public void run() {
-                topBalances = main.storageManager.storage.getTopBalances();
+                resetCache();
             }
-        }.runTaskAsynchronously(main);
+        }.runTaskTimer(main, ticks, ticks);
     }
+
+    public BukkitTask autoCacheTask = null;
 }

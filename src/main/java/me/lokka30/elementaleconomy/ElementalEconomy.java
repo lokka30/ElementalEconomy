@@ -43,7 +43,6 @@ public class ElementalEconomy extends JavaPlugin {
     public void onEnable() {
         Utils.logger.info("&f~ Initiating start-up procedure ~");
         QuickTimer timer = new QuickTimer();
-        timer.start();
 
         instance = this;
 
@@ -51,11 +50,10 @@ public class ElementalEconomy extends JavaPlugin {
         companion.loadFiles();
         companion.loadStorage();
         companion.loadCurrencies();
-        companion.cacheBaltop();
+        companion.loadBaltop();
         companion.registerListeners();
         companion.registerCommands();
         companion.hookExternalPlugins();
-
 
         Utils.logger.info("&f(Startup) &7Running misc procedures...");
         companion.startMetrics();
@@ -67,9 +65,10 @@ public class ElementalEconomy extends JavaPlugin {
     @Override
     public void onDisable() {
         Utils.logger.info("&f~ Initiating shut-down procedure ~");
-        QuickTimer timer = new QuickTimer(); timer.start();
+        QuickTimer timer = new QuickTimer();
 
         companion.unhookExternalPlugins();
+        companion.disableBaltopTask();
         companion.disableStorage();
 
         Utils.logger.info("&f~ Shut-down complete, took &b" + timer.getTimer() + "ms&f ~");

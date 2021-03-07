@@ -99,9 +99,10 @@ public class Companion {
         main.currencyManager.loadCurrencies();
     }
 
-    public void cacheBaltop() {
+    public void loadBaltop() {
         Utils.logger.info("&f(Baltop) &7Caching baltop...");
         main.baltopManager.resetCache();
+        main.baltopManager.startAutoCacheTask();
     }
 
     public void registerListeners() {
@@ -168,6 +169,13 @@ public class Companion {
         if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
             Utils.logger.info("&f(Hook) &bVault&7 found, un-hooking...");
             Bukkit.getServicesManager().unregister(Economy.class, main.vaultHoook);
+        }
+    }
+
+    public void disableBaltopTask() {
+        if (main.baltopManager.autoCacheTask != null) {
+            Utils.logger.info("&f(Baltop) &7Stopping baltop auto cache task...");
+            main.baltopManager.autoCacheTask.cancel();
         }
     }
 

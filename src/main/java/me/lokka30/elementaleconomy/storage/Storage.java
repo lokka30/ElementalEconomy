@@ -77,4 +77,13 @@ public interface Storage {
      * @return map of the highest balances for each currency (sorted in order).
      */
     Map<Integer, SortedMap<Integer, BigDecimal>> getTopBalances();
+
+    /**
+     * This method is used by the baltop command to get the username of players
+     * from their account ID.
+     *
+     * @param accountId account id of the player
+     * @return their last known username
+     */
+    String getUsernameFromAccountId(int accountId);
 }

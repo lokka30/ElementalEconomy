@@ -6,7 +6,7 @@
 
     <groupId>me.lokka30</groupId>
     <artifactId>ElementalEconomy</artifactId>
-    <version>b19 indev</version>
+    <version>b20 indev</version>
 
     <packaging>jar</packaging>
 
@@ -104,7 +104,7 @@
         <dependency>
             <groupId>com.github.lokka30</groupId>
             <artifactId>MicroLib</artifactId>
-            <version>2.1.1</version>
+            <version>bf026b06</version> <!-- v2.2.0 -->
         </dependency>
         <dependency>
             <groupId>co.aikar</groupId>

@@ -18,7 +18,7 @@ storage:
 
   # How should ElementalEconomy store balances?
   #
-  # Note if changing:
+  # README if you plan on changing this:
   # - Balances do not transfer from your previous storage solution.
   # - Balances do not wipe from your previous storage solution.
   #   If you switch to a storage method previously used then
@@ -27,22 +27,22 @@ storage:
   #   out. See 'mysql-settings' below.
   #
   # Available storage methods:
-  # - SQLite (highly recommended for most servers)
-  #   ? Local database stored in the ElementalEconomy folder.
+  # - SQLite (highly recommended for most servers, and the default choice)
+  #   > Local database stored in the ElementalEconomy folder.
   #   + Fastest, and far faster than YAML.
   #   - Cannot synchronise with other servers.
   #   - Difficult to manually edit data.
   #   + No configuration.
   #
-  # - MySQL (must-have for servers that need to sync with other servers)
-  #   ? Database stored in your MySQL server.
+  # - MySQL (required for balance synchronisation, if you need it)
+  #   > Database stored in your MySQL server.
   #   + Fast.
   #   + Can synchronise with other servers.
   #   - Difficult to manually edit data.
   #   - Requires configuration below in mysql-settings.
   #
-  # - YAML (great for small communities if you need full control over your data)
-  #   ? Configuration-like file stored in the ElementalEconomy folder.
+  # - YAML (great for small communities & if you need full control over your data)
+  #   > Configuration-like file stored in the ElementalEconomy folder.
   #   - Quite fast, although slower than SQLite, although
   #     only an issue when lots of users are stored.
   #   - Cannot synchronise with other servers.
@@ -62,12 +62,33 @@ storage:
     host: 'localhost:3306'
 
 
+# These settings control the 'baltop' system - a command that shows the top balances for each currency
+# you have configured.
+baltop:
+
+  # Should the system be enabled?
+  # Feel free to disable the baltop system if your server never uses it.
+  # Very small resource savings, but hey, you have the choice ;)
+  # By default, this is enabled (true).
+  enabled: true
+
+  # How frequently, in minutes, should the baltop system 'refresh' itself?
+  # Lower values = may consume an unnecessary amount of CPU / load on the storage system
+  # Higher values = players will have to wait longer to see the latest balances on baltop
+  # Recommended values: 7 to 20 minutes. By default, this is 10 minutes (10).
+  auto-cache-task-period: 10
+
+  # How many users should be displayed on each baltop page? By default, this is 10 pages (10).
+  users-per-page: 10
+
+
 # A quiet async update checker that does its job once when the plugin starts up and then leaves you alone. This
 # feature only works on 1.11+ servers, please disable it if your server is running a version older than 1.11.
+# By default, this is enabled (true).
 check-for-updates: true
 
 
-# ** It is not recommended to suppress ElementalEconomy warnings. **
+# ** It is not recommended to suppress ElementalEconomy warnings. You should try fix them instead! **
 # If ElementalEconomy is annoying you with warnings, then there is a high chance you can disable them here.
 suppressed-warnings:
 

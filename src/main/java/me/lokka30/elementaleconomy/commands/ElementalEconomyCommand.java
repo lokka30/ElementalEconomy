@@ -53,6 +53,9 @@ public class ElementalEconomyCommand implements TabExecutor {
                         sender.sendMessage("Reloading currencies...");
                         main.companion.loadCurrencies();
 
+                        sender.sendMessage("Reloading baltop...");
+                        main.companion.loadBaltop();
+
                         sender.sendMessage("Reload complete.");
                     } else {
                         sender.sendMessage("No permission.");
