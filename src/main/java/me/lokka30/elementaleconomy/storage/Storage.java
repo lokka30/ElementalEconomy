@@ -3,6 +3,8 @@ package me.lokka30.elementaleconomy.storage;
 import me.lokka30.elementaleconomy.accounts.Account;
 
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.UUID;
 
 /**
@@ -56,10 +58,23 @@ public interface Storage {
     /**
      * This method is unused since balances are cached when an account is loaded via getAccount(UUID).
      *
-     * @param accountId account id
-     * @param currencyId  currency
+     * @param accountId  account id
+     * @param currencyId currency
      * @return balance
+     */
+    /*
+    This method is currently unused however remains in case it is required for future use.
      */
     @SuppressWarnings("unused")
     BigDecimal getBalance(int accountId, int currencyId);
+
+    /**
+     * A map of each currency and the top balances of every player of that currency
+     * <p>
+     * Layout:
+     * Map<CurrencyID, SortedMap<AccountID, Balance>>
+     *
+     * @return map of the highest balances for each currency (sorted in order).
+     */
+    Map<Integer, SortedMap<Integer, BigDecimal>> getTopBalances();
 }

@@ -11,8 +11,7 @@ import org.bukkit.Bukkit;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class YAMLStorage implements Storage {
 
@@ -123,6 +122,29 @@ public class YAMLStorage implements Storage {
         } else {
             return null;
         }
+    }
+
+    /**
+     * A map of each currency and the top balances of every player of that currency
+     * <p>
+     * Layout:
+     * Map<CurrencyID, SortedMap<AccountID, Balance>>
+     *
+     * @return map of the highest balances for each currency (sorted in order).
+     */
+    @Override
+    public Map<Integer, SortedMap<Integer, BigDecimal>> getTopBalances() {
+        final HashMap<Integer, SortedMap<Integer, BigDecimal>> topBalances = new HashMap<>();
+
+        //noinspection ConstantConditions
+        for (String accountId : dataFile.getConfig().getConfigurationSection("balances").getKeys(false)) {
+            //noinspection ConstantConditions
+            for (String currencyId : dataFile.getConfig().getConfigurationSection("balances." + accountId).getKeys(false)) {
+                topBalances.getOrDefault(Integer.valueOf(currencyId), new TreeMap<>()).put(Integer.valueOf(accountId), BigDecimal.valueOf(dataFile.getConfig().getDouble("balances." + accountId + "." + currencyId, 0.0)));
+            }
+        }
+
+        return topBalances;
     }
 
     private void saveDataCfg() {

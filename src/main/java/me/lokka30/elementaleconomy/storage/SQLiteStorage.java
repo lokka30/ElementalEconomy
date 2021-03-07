@@ -9,6 +9,8 @@ import me.lokka30.elementaleconomy.accounts.Account;
 import me.lokka30.elementaleconomy.utils.Utils;
 
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.UUID;
 
 public class SQLiteStorage implements Storage {
@@ -71,6 +73,19 @@ public class SQLiteStorage implements Storage {
 
     @Override
     public BigDecimal getBalance(int accountId, int currencyId) {
+        return null;
+    }
+
+    /**
+     * A map of each currency and the top balances of every player of that currency
+     * <p>
+     * Layout:
+     * Map<CurrencyID, SortedMap<AccountID, Balance>>
+     *
+     * @return map of the highest balances for each currency (sorted in order).
+     */
+    @Override
+    public Map<Integer, SortedMap<Integer, BigDecimal>> getTopBalances() {
         return null;
     }
 }
