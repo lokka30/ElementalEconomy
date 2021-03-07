@@ -148,6 +148,21 @@ public class YAMLStorage implements Storage {
         return topBalances;
     }
 
+    /**
+     * This method is used by the baltop command to get the username of players
+     * from their account ID.
+     *
+     * @param accountId account id of the player
+     * @return their last known username
+     */
+    @Override
+    public String getUsernameFromAccountId(int accountId) {
+        //noinspection ConstantConditions
+        UUID uuid = UUID.fromString(dataFile.getConfig().getString("accounts.id-uuid-map." + accountId));
+
+        return dataFile.getConfig().getString("accounts." + uuid.toString() + ".lastUsername");
+    }
+
     private void saveDataCfg() {
         try {
             dataFile.save();

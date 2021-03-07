@@ -88,4 +88,16 @@ public class SQLiteStorage implements Storage {
     public Map<Integer, SortedMap<Integer, BigDecimal>> getTopBalances() {
         return null;
     }
+
+    /**
+     * This method is used by the baltop command to get the username of players
+     * from their account ID.
+     *
+     * @param accountId account id of the player
+     * @return their last known username
+     */
+    @Override
+    public String getUsernameFromAccountId(int accountId) {
+        return null;
+    }
 }
