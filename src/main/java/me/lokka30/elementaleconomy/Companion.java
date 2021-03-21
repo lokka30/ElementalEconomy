@@ -3,9 +3,9 @@ package me.lokka30.elementaleconomy;
 import me.lokka30.elementaleconomy.commands.*;
 import me.lokka30.elementaleconomy.listeners.PlayerJoinListener;
 import me.lokka30.elementaleconomy.listeners.PlayerQuitListener;
-import me.lokka30.elementaleconomy.misc.PossibleIncompatibility;
 import me.lokka30.elementaleconomy.utils.Utils;
 import me.lokka30.microlib.UpdateChecker;
+import me.lokka30.microlib.VersionUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -20,9 +20,20 @@ import java.util.Objects;
 public class Companion {
 
     private final ElementalEconomy main;
-    public Companion(ElementalEconomy main) { this.main = main; }
+
+    public Companion(ElementalEconomy main) {
+        this.main = main;
+    }
+
+    public enum PossibleIncompatibility {
+        UNSUPPORTED_SERVER_VERSION,
+        NO_VALID_ECONOMY_API,
+        TOWNY_INSTALLED
+    }
+
 
     public int possibleIncompatibilitiesAmount = 0;
+
     public void checkCompatibility() {
         Utils.logger.info("&f(Compatibility Checker) &7Checking for possible incompatibilities...");
 
@@ -30,12 +41,9 @@ public class Companion {
         HashSet<PossibleIncompatibility> possibleIncompatibilities = new HashSet<>();
 
         // Server version supported?
-        boolean isSupported = false;
-        for (String supportedServerVersion : Utils.supportedServerVersions) {
-            if (Bukkit.getVersion().contains(supportedServerVersion)) isSupported = true;
-            break;
+        if (!VersionUtils.isOneSix()) { // Only 1.6+ is supported.
+            possibleIncompatibilities.add(PossibleIncompatibility.UNSUPPORTED_SERVER_VERSION);
         }
-        if (!isSupported) possibleIncompatibilities.add(PossibleIncompatibility.UNSUPPORTED_SERVER_VERSION);
 
         // Valid economy API not installed?
         if (pluginManager.getPlugin("Vault") == null) {

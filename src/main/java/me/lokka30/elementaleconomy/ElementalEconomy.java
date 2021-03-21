@@ -12,6 +12,8 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashSet;
 
 public class ElementalEconomy extends JavaPlugin {
 
@@ -73,4 +75,13 @@ public class ElementalEconomy extends JavaPlugin {
 
         Utils.logger.info("&f~ Shut-down complete, took &b" + timer.getTimer() + "ms&f ~");
     }
+
+    /*
+    These variables are used by ElementalEconomyCommand.java but are
+    put here just so that they are easy to access and adapt in case
+    a contributor needs to edit its values.
+     */
+    public final HashSet<String> developers = new HashSet<>(Collections.singletonList("lokka30"));
+    public final HashSet<String> contributors = new HashSet<>(Collections.singletonList("N/A"));
+    public final String supportedVersions = "1.6.x - 1.16.x";
 }

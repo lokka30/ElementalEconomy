@@ -3,7 +3,6 @@ package me.lokka30.elementaleconomy.storage;
 import me.lokka30.elementaleconomy.ElementalEconomy;
 import me.lokka30.elementaleconomy.accounts.Account;
 import me.lokka30.elementaleconomy.currencies.Currency;
-import me.lokka30.elementaleconomy.misc.DebugMessageType;
 import me.lokka30.elementaleconomy.utils.Utils;
 import me.lokka30.microlib.YamlConfigFile;
 import org.bukkit.Bukkit;
@@ -108,10 +107,10 @@ public class YAMLStorage implements Storage {
         dataFile.getConfig().set("balances." + accountId + "." + currencyId, balance.doubleValue());
         saveDataCfg();
 
-        Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "YAMLStorage#setBalance ran:");
-        Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "&8 - &7Account ID: " + accountId);
-        Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "&8 - &7Currency ID: " + currencyId);
-        Utils.sendDebugMessage(DebugMessageType.BALANCE_METHODS, "&8 - &7New balance: ~" + balance.floatValue());
+        Utils.sendDebugMessage(Utils.DebugMessageType.BALANCE_METHODS, "YAMLStorage#setBalance ran:");
+        Utils.sendDebugMessage(Utils.DebugMessageType.BALANCE_METHODS, "&8 - &7Account ID: " + accountId);
+        Utils.sendDebugMessage(Utils.DebugMessageType.BALANCE_METHODS, "&8 - &7Currency ID: " + currencyId);
+        Utils.sendDebugMessage(Utils.DebugMessageType.BALANCE_METHODS, "&8 - &7New balance: ~" + balance.floatValue());
     }
 
     @Override

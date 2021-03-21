@@ -5,6 +5,7 @@ import me.lokka30.elementaleconomy.ElementalEconomy;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 
 public class CurrencyManager {
@@ -26,6 +27,8 @@ public class CurrencyManager {
         currencyNameIdMap.clear();
 
         for (String currencyName : Objects.requireNonNull(main.currencies.getConfig().getConfigurationSection("currencies")).getKeys(false)) {
+            currencyName = currencyName.toLowerCase(Locale.ROOT);
+
             final String path = "currencies." + currencyName + ".";
             final int id = main.currencies.getConfig().getInt(path + "id", 0);
             final BigDecimal startingBalance = BigDecimal.valueOf(main.currencies.getConfig().getDouble(path + "starting-balance", 50.00));

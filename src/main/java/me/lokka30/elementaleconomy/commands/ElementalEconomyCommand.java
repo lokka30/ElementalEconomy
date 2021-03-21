@@ -35,7 +35,10 @@ public class ElementalEconomyCommand implements TabExecutor {
             switch (args[0].toUpperCase()) {
                 case "INFO":
                     if (sender.hasPermission("elementaleconomy.command.elementaleconomy.info")) {
-                        sender.sendMessage("Running ElementalEconomy v" + main.getDescription().getVersion() + " by " + String.join(", ", Utils.contributors));
+                        sender.sendMessage("Running ElementalEconomy v" + main.getDescription().getVersion() + ".");
+                        sender.sendMessage("Developers: " + String.join(", ", main.developers));
+                        sender.sendMessage("Contributors: " + String.join(", ", main.contributors));
+                        sender.sendMessage("Min supported version: " + main.supportedVersions);
                     } else {
                         sender.sendMessage("No permission.");
                     }
