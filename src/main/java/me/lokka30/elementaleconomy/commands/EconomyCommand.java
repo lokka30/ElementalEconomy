@@ -1,6 +1,7 @@
 package me.lokka30.elementaleconomy.commands;
 
 import me.lokka30.elementaleconomy.ElementalEconomy;
+import me.lokka30.elementaleconomy.currencies.Currency;
 import me.lokka30.elementaleconomy.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -80,7 +81,7 @@ public class EconomyCommand implements TabExecutor {
         UUID uuid = null;
 
         Player player = Bukkit.getPlayer(args[1]);
-        if (player.isOnline()) uuid = player.getUniqueId();
+        if (player != null) uuid = player.getUniqueId();
 
         @SuppressWarnings("deprecation") // the deprecated method is intended
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
@@ -105,7 +106,7 @@ public class EconomyCommand implements TabExecutor {
         }
 
         // make sure the amount is greater than zero. users should use 'eco take' to withdraw amounts
-        if (amount.compareTo(BigDecimal.ZERO) != 1) {
+        if (amount.compareTo(BigDecimal.ZERO) < 1) {
             sender.sendMessage("Invalid amount " + args[2] + ": must be greater than zero");
         }
 
@@ -126,16 +127,15 @@ public class EconomyCommand implements TabExecutor {
             currencyId = main.currencyManager.getDefaultCurrency().id;
         }
 
+        Currency currency = main.currencyManager.getCurrency(currencyId);
+
         /*
         operation
          */
         // set balance
         main.accountManager.getAccount(uuid).deposit(currencyId, amount);
 
-        // send message
-        String formattedAmount = main.currencyManager.getCurrency(currencyId).getFormattedAmount(amount);
-
-        player.sendMessage("Added " + formattedAmount + " to " + args[1] + "'s balance.");
+        sender.sendMessage("Added '" + currency.getFormattedAmount(amount) + "' to " + args[1] + "'s balance of currency '" + currency.name + "'.");
     }
 
     void parseTake(CommandSender sender, String label, String[] args) {
@@ -159,7 +159,7 @@ public class EconomyCommand implements TabExecutor {
         UUID uuid = null;
 
         Player player = Bukkit.getPlayer(args[1]);
-        if (player.isOnline()) uuid = player.getUniqueId();
+        if (player != null) uuid = player.getUniqueId();
 
         @SuppressWarnings("deprecation") // the deprecated method is intended
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
@@ -184,7 +184,7 @@ public class EconomyCommand implements TabExecutor {
         }
 
         // make sure the amount is greater than zero. users should use 'eco take' to withdraw amounts
-        if (amount.compareTo(BigDecimal.ZERO) != 1) {
+        if (amount.compareTo(BigDecimal.ZERO) < 1) {
             sender.sendMessage("Invalid amount " + args[2] + ": must be greater than zero");
         }
 
@@ -205,14 +205,13 @@ public class EconomyCommand implements TabExecutor {
             currencyId = main.currencyManager.getDefaultCurrency().id;
         }
 
-        // formatted amount from currency
-        String formattedAmount = main.currencyManager.getCurrency(currencyId).getFormattedAmount(amount);
+        Currency currency = main.currencyManager.getCurrency(currencyId);
 
         /*
         check if target has enough funds to be removed
          */
         if (!main.accountManager.getAccount(uuid).has(currencyId, amount)) {
-            sender.sendMessage(args[1] + "'s balance does not exceed and is not equal to " + formattedAmount + ".");
+            sender.sendMessage("Invalid amount: " + args[1] + "'s balance with currency '" + currency.name + "' is less than '" + currency.getFormattedAmount(amount) + "'.");
             return;
         }
 
@@ -223,15 +222,147 @@ public class EconomyCommand implements TabExecutor {
         main.accountManager.getAccount(uuid).withdraw(currencyId, amount);
 
         // send message
-        player.sendMessage("Withdrew " + formattedAmount + " from " + args[1] + "'s balance.");
+        sender.sendMessage("Withdrew '" + currency.getFormattedAmount(amount) + "' from " + args[1] + "'s balance of currency '" + currency.name + "'.");
     }
 
     void parseSet(CommandSender sender, String label, String[] args) {
-        sender.sendMessage("Command is incomplete. (SET)");
+        if (!sender.hasPermission("elementaleconomy.command.economy.set")) {
+            sender.sendMessage("No permission");
+            return;
+        }
+
+        // Usage: /eco set <player> <amount> [currency]
+        // args   |    |0  |1       |2       |3
+        // len    |0   |1  |2       |3       |4
+
+        if (args.length != 3 && args.length != 4) {
+            sender.sendMessage("Usage: /" + label + " set <player> <amount> [currency]");
+            return;
+        }
+
+        /*
+        check player
+         */
+        UUID uuid = null;
+
+        Player player = Bukkit.getPlayer(args[1]);
+        if (player != null) uuid = player.getUniqueId();
+
+        @SuppressWarnings("deprecation") // the deprecated method is intended
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
+        if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) uuid = offlinePlayer.getUniqueId();
+
+        if (uuid == null) {
+            sender.sendMessage("Player " + args[1] + " hasn't joined this server before.");
+            return;
+        }
+
+        /*
+        check amount
+         */
+        final BigDecimal amount;
+
+        // set the amount, and make sure it is valid
+        try {
+            amount = new BigDecimal(args[2]);
+        } catch (NumberFormatException ex) {
+            sender.sendMessage("Invalid amount " + args[2] + ": unable to parse format");
+            return;
+        }
+
+        // make sure the amount is greater than zero. users should use 'eco take' to withdraw amounts
+        if (amount.compareTo(BigDecimal.ZERO) < 1) {
+            sender.sendMessage("Invalid amount " + args[2] + ": must be greater than zero");
+        }
+
+        /*
+        check currency
+         */
+        final int currencyId;
+
+        // use specified currency, and if unspecified, use the default one
+        if (args.length == 4) {
+            if (main.currencyManager.currencyNameIdMap.containsKey(args[3])) {
+                currencyId = main.currencyManager.currencyNameIdMap.get(args[3]);
+            } else {
+                sender.sendMessage("Invalid currency " + args[3] + ".");
+                return;
+            }
+        } else {
+            currencyId = main.currencyManager.getDefaultCurrency().id;
+        }
+
+        Currency currency = main.currencyManager.getCurrency(currencyId);
+
+        /*
+        operation
+         */
+        // set balance
+        main.accountManager.getAccount(uuid).setBalance(currencyId, amount);
+
+        // send message
+        sender.sendMessage("Set " + args[1] + "'s balance of currency '" + currency.name + "' to '" + currency.getFormattedAmount(amount) + "'.");
     }
 
     void parseReset(CommandSender sender, String label, String[] args) {
-        sender.sendMessage("Command is incomplete. (RESET)");
+        if (!sender.hasPermission("elementaleconomy.command.economy.set")) {
+            sender.sendMessage("No permission");
+            return;
+        }
+
+        // Usage: /eco reset <player> [currency]
+        // args   |    |0    |1       |2
+        // len    |0   |1    |2       |3
+
+        if (args.length != 3 && args.length != 4) {
+            sender.sendMessage("Usage: /" + label + " reset <player> [currency]");
+            return;
+        }
+
+        /*
+        check player
+         */
+        UUID uuid = null;
+
+        Player player = Bukkit.getPlayer(args[1]);
+        if (player != null) uuid = player.getUniqueId();
+
+        @SuppressWarnings("deprecation") // the deprecated method is intended
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
+        if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) uuid = offlinePlayer.getUniqueId();
+
+        if (uuid == null) {
+            sender.sendMessage("Player " + args[1] + " hasn't joined this server before.");
+            return;
+        }
+
+        /*
+        check currency
+         */
+        final int currencyId;
+
+        // use specified currency, and if unspecified, use the default one
+        if (args.length == 4) {
+            if (main.currencyManager.currencyNameIdMap.containsKey(args[3])) {
+                currencyId = main.currencyManager.currencyNameIdMap.get(args[3]);
+            } else {
+                sender.sendMessage("Invalid currency " + args[3] + ".");
+                return;
+            }
+        } else {
+            currencyId = main.currencyManager.getDefaultCurrency().id;
+        }
+
+        Currency currency = main.currencyManager.getCurrency(currencyId);
+
+        /*
+        operation
+         */
+        // set balance
+        main.accountManager.getAccount(uuid).setBalance(currencyId, currency.startingBalance);
+
+        // send message
+        sender.sendMessage("Reset " + args[1] + "'s balance of currency '" + currency.name + "' to the starting balance of '" + currency.getFormattedAmount(currency.startingBalance) + "'.");
     }
 
     @Override
@@ -249,9 +380,11 @@ public class EconomyCommand implements TabExecutor {
                     // give|add, take|remove & set all share the same args, which is why there is no definite 'break' except for under 'SET'.
                     case "GIVE":
                     case "ADD":
+                    case "DEPOSIT":
                         if (!sender.hasPermission("elementaleconomy.command.economy.give")) break;
                     case "TAKE":
                     case "REMOVE":
+                    case "WITHDRAW":
                         if (!sender.hasPermission("elementaleconomy.command.economy.take")) break;
                     case "SET":
                         if (!sender.hasPermission("elementaleconomy.command.economy.set")) break;
