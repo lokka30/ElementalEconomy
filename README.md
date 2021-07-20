@@ -21,6 +21,8 @@ Usually, this plugin is accessed by other plugins using Vault. Vault acts like a
 
 ElementalEconomy is a plugin designed from the ground up to simply do what most servers have been asking *years* ago - unfortunately, nobody delivered a solid enough solution, so I took it upon myself to try fill this gap (as I was one of these owners).
 
+This plugin is being programmed as a brand new successor to my old, discontinued plugin, PhantomEconomy.
+
 [Check out the SpigotMC page](https://www.spigotmc.org) if you would like to learn more and/or download it. :)
 
 ## License
